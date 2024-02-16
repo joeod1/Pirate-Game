@@ -9,13 +9,19 @@ using UnityEngine.Tilemaps;
 public class PlayerShipController : ShipController
 {
     [Header("Physics & Camera")]
+    public Camera camera;
     public Transform cameraTransform;
+    public float cameraSizeNormal = 6f;
+    public float cameraSizeMap = 100f;
+    private float lerpCamera = 0f;
 
     [Header("World")]
     public TerrainGeneration terrainGenerator;
     private Dictionary<Vector2Int, bool> chunksRendered = new Dictionary<Vector2Int, bool>();
     private Vector3Int knownPosition;
-    public Vector2Int renderBounds;
+    public Vector2Int renderBounds = new Vector2Int(24, 20);
+    public Vector2Int mapModeBounds = new Vector2Int(200, 200);
+    private Vector2Int currentBounds;
 
 
     // Start is called before the first frame update
@@ -43,6 +49,22 @@ public class PlayerShipController : ShipController
             RenderChunk((chunkCoords - new Vector2(1.5f, 1.5f)) * new Vector2(25, 25), new Vector2Int(30, 30));
             chunksRendered[chunkCoords] = true;
         }*/
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            terrainGenerator.ClearPlusRender(transform.position, mapModeBounds);
+        } else if (Input.GetKey(KeyCode.M))
+        {
+            if (lerpCamera < 1)
+            {
+                lerpCamera += 0.1f;
+                camera.orthographicSize = math.lerp(cameraSizeNormal, cameraSizeMap, lerpCamera);
+            }
+        } else if (lerpCamera > 0)
+        {
+            lerpCamera -= 0.1f;
+            camera.orthographicSize = math.lerp(cameraSizeNormal, cameraSizeMap, lerpCamera);
+        }
 
 
         Vector2 direction = new Vector2(0, 0);
