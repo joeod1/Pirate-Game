@@ -22,6 +22,7 @@ public class PlayerShipController : ShipController
     public Vector2Int renderBounds = new Vector2Int(24, 20);
     public Vector2Int mapModeBounds = new Vector2Int(200, 200);
     private Vector2Int currentBounds;
+    private bool renderedChunkZoomOut;
 
 
     // Start is called before the first frame update
@@ -35,9 +36,16 @@ public class PlayerShipController : ShipController
     void Update()
     {
         Vector3Int currentPosition = terrainGenerator.WorldToCell(transform.position);
-        if ((currentPosition - knownPosition).magnitude > 5)
+        if ((currentPosition - knownPosition).magnitude > renderBounds.magnitude / 5f)
         {
-            terrainGenerator.ClearPlusRender(transform.position, renderBounds);
+            renderedChunkZoomOut = false;
+            if (Input.GetKey(KeyCode.M))
+            {
+                terrainGenerator.ClearPlusRender(transform.position, mapModeBounds);
+            } else
+            {
+                terrainGenerator.ClearPlusRender(transform.position, renderBounds);
+            }
             knownPosition = currentPosition;
         }
         /*Vector2Int chunkCoords = 
@@ -53,7 +61,13 @@ public class PlayerShipController : ShipController
         if (Input.GetKeyDown(KeyCode.M))
         {
             terrainGenerator.ClearPlusRender(transform.position, mapModeBounds);
-        } else if (Input.GetKey(KeyCode.M))
+            camera.orthographicSize = cameraSizeMap;
+        }
+        else if (Input.GetKeyUp(KeyCode.M))
+        {
+            terrainGenerator.ClearPlusRender(transform.position, renderBounds);
+            camera.orthographicSize = cameraSizeNormal;
+        }/* else if (Input.GetKey(KeyCode.M))
         {
             if (lerpCamera < 1)
             {
@@ -62,8 +76,31 @@ public class PlayerShipController : ShipController
             }
         } else if (lerpCamera > 0)
         {
-            lerpCamera -= 0.1f;
+            lerpCamera -= 0.05f;
             camera.orthographicSize = math.lerp(cameraSizeNormal, cameraSizeMap, lerpCamera);
+        } else if (lerpCamera <= 0 && lerpCamera > -1f)
+        {
+            lerpCamera = -1f;
+            terrainGenerator.ClearPlusRender(transform.position, renderBounds);
+        }*/
+
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            camera.orthographicSize += Input.mouseScrollDelta.y / 2f;
+            if (camera.orthographicSize < 2)
+            {
+                camera.orthographicSize = 2;
+            }
+            else if (camera.orthographicSize > 50)
+            {
+                camera.orthographicSize = 50 ;
+            }
+            renderBounds = new Vector2Int((int)camera.orthographicSize * 4 + 10, (int)camera.orthographicSize * 3 + 10);
+            if (!renderedChunkZoomOut)
+            {
+                renderedChunkZoomOut = true;
+                terrainGenerator.ClearPlusRender(transform.position, new Vector2Int(100, 100));
+            }
         }
 
 

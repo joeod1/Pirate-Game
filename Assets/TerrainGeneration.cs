@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,6 +9,8 @@ public class TerrainGeneration : MonoBehaviour
     [Header("Generation")]
     public float waterLevel = 0.15f;
     public float featureSize = 7f;
+    public float featureSizeVariation = 1.0f;
+    public float featureSizeVariationFrequency = 7f;
     public float biomeSize = 32f;
 
     [Header("Tilemaps")]
@@ -34,8 +35,36 @@ public class TerrainGeneration : MonoBehaviour
     public bool IsWater(Vector2 position)
     {
         Vector3Int cellPos = collidable.WorldToCell(position);
-        float val = noise.snoise(new float2(cellPos.x / featureSize, cellPos.y / featureSize));
-        return val >= waterLevel;
+        return GetTerrainValue(cellPos.x, cellPos.y) >= waterLevel;
+    }
+    public bool IsWater(Vector3Int cellPos)
+    {
+        return GetTerrainValue(cellPos.x, cellPos.y) >= waterLevel;
+    }
+
+    public bool IsWater(int row, int col)
+    {
+        return GetTerrainValue(row, col) >= waterLevel;
+    }
+
+    public float GetTerrainValue(int row, int col)
+    {
+        float tmp = (
+                    noise.snoise(
+                        new float2(
+                            (col) / featureSizeVariationFrequency,
+                            (row) / featureSizeVariationFrequency)
+                        )
+                    ) * (featureSizeVariation
+                        * (
+                            500f / (
+                                Vector2.zero
+                                - new Vector2(col, row)
+                            ).magnitude
+                        )
+                    );
+        float val = noise.snoise(new float2(col / (featureSize + tmp), row / (featureSize + tmp)));
+        return val;
     }
 
     public Vector3Int WorldToCell(Vector2 position)
@@ -43,16 +72,17 @@ public class TerrainGeneration : MonoBehaviour
         return collidable.WorldToCell(position);
     }
 
+
     // Renders a bounds-sized block of cells centered on middle.
     public void RenderBlock(Vector2 middle, Vector2Int bounds)
     {
         Vector3Int cellPos = collidable.WorldToCell(middle);
-        for (float col = cellPos.x - bounds.x / 2; col < cellPos.x + bounds.x / 2; col += 1)
+        for (int col = cellPos.x - bounds.x / 2; col < cellPos.x + bounds.x / 2; col += 1)
         {
-            for (float row = cellPos.y - bounds.y / 2; row < cellPos.y + bounds.y / 2; row += 1)
+            for (int row = cellPos.y - bounds.y / 2; row < cellPos.y + bounds.y / 2; row += 1)
             {
-                float val = noise.snoise(new float2(col / featureSize, row / featureSize));
-                if (val > waterLevel)
+                float val = GetTerrainValue(row, col);
+                if (val <= waterLevel)
                 {
                     float tileType = val * noise.snoise(new float2(col / biomeSize, row / biomeSize)) * 1.2f;
                     Tile tile;

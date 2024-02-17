@@ -1022,8 +1022,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1f70b0dc831a3409e9a39508448246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterLevel: 0.15
-  featureSize: 14
+  waterLevel: -0.1
+  featureSize: 30
+  featureSizeVariation: 0.5
+  featureSizeVariationFrequency: 10
   biomeSize: 32
   collidable: {fileID: 299633218}
   uncollidable: {fileID: 794420481}
@@ -1713,6 +1715,7 @@ MonoBehaviour:
   horizontalAngle: 45
   verticalAngle: 45
   target: {fileID: 1780345233}
+  terrainGenerator: {fileID: 0}
 --- !u!50 &2039941005
 Rigidbody2D:
   serializedVersion: 4

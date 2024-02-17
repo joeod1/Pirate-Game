@@ -9,11 +9,37 @@ using UnityEngine.Tilemaps;
 public class EnemyShipController : ShipController
 {
     public GameObject target;
+    public TerrainGeneration terrainGenerator;
 
     // Start is called before the first frame update
     void Start()
     {
         base.Init();
+    }
+    /*
+    void ReconstructPath(Vector2 from, )
+    {
+
+    }*/
+
+    void CalculatePath(Vector2 start, Vector2 end)
+    {
+        Vector3Int startCell = terrainGenerator.WorldToCell(start);
+        Vector3Int endCell = terrainGenerator.WorldToCell(end);
+
+        List<Vector3Int> openSet = new List<Vector3Int>();
+        HashSet<Vector3Int> closedSet = new HashSet<Vector3Int>();
+        openSet.Add(startCell);
+
+        while (openSet.Count > 0)
+        {
+            Vector3Int current = openSet[0];
+            for (int i = 1; i < openSet.Count; i++)
+            {
+                // if (openSet[i].fC)
+            }
+        }
+        //terrainGenerator.IsWater();
     }
 
     // Update is called once per frame
