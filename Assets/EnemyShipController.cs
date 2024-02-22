@@ -1,20 +1,45 @@
+using Assets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class EnemyShipController : ShipController
 {
-    public GameObject target;
+    public PathNode target;
     public TerrainGeneration terrainGenerator;
+    public Assets.Port homePort;
+    public Assets.Port fromPort;
+    public Vector2 pathStart;
+    public Vector2 pathEnd;
+
+    private Vector2 from;
+    private Vector2 targetDir;
 
     // Start is called before the first frame update
     void Start()
     {
         base.Init();
+        Path result = new Path();
+        int count = 0;
+        while ((result == null || result.currentNode == null) && count < 50)
+        {
+            count++;
+            result = terrainGenerator.AStar(
+                new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
+                transform.position.x + UnityEngine.Random.Range(-100f, 100f)),
+                new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
+                transform.position.x + UnityEngine.Random.Range(-100f, 100f))
+                );
+        }
+        target = result.currentNode;
+        Vector3 pos1 = terrainGenerator.CellToWorld(target.cell);
+        transform.position = new Vector3(pos1.x, pos1.y, transform.position.z);
     }
     /*
     void ReconstructPath(Vector2 from, )
@@ -22,55 +47,135 @@ public class EnemyShipController : ShipController
 
     }*/
 
-    void CalculatePath(Vector2 start, Vector2 end)
+    void MoveToTarget(Vector2 targetPos, float depth)
     {
-        Vector3Int startCell = terrainGenerator.WorldToCell(start);
-        Vector3Int endCell = terrainGenerator.WorldToCell(end);
-
-        List<Vector3Int> openSet = new List<Vector3Int>();
-        HashSet<Vector3Int> closedSet = new HashSet<Vector3Int>();
-        openSet.Add(startCell);
-
-        while (openSet.Count > 0)
+        Vector2 direction = Vector2.zero;
+        from = new Vector2(transform.position.x, transform.position.y);
+        targetDir = (targetPos - from);
+        float targetRotation = math.degrees(math.atan2(targetDir.x, targetDir.y));
+        float offRotation = (-targetRotation - transform.rotation.eulerAngles.z + 360) % 360;
+        if (offRotation <= 180 && offRotation > 10)
         {
-            Vector3Int current = openSet[0];
-            for (int i = 1; i < openSet.Count; i++)
+            direction.x += 1;
+        } else if (offRotation > 180 && offRotation < 350)
+        {
+            direction.x -= 1;
+        }
+        direction.y = (math.abs(180 - offRotation) / 180f) * (target.depth * 0.3f + 0.1f);
+
+        base.ApplyForce(direction);
+    }
+
+    void MoveToCell(Vector3Int targetCell, float depth)
+    {
+        MoveToTarget(terrainGenerator.CellToWorld(targetCell), depth);
+    } 
+
+    void MoveToNode(PathNode node)
+    {
+        MoveToCell(node.cell, node.depth);
+    }
+
+    void SelectTarget()
+    {
+        Path result = new Path();
+        int count = 0;
+        while ((result == null || result.currentNode == null) && count < 1)
+        {
+            count++;
+            pathStart = new Vector2(transform.position.x, transform.position.y);
+            pathEnd = new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
+                transform.position.y + UnityEngine.Random.Range(-100f, 100f));
+            result = terrainGenerator.AStar(
+                pathEnd,
+                pathStart
+                );
+        }
+        if (result != null && result.currentNode != null)
+        {
+            target = result.currentNode;
+            //Vector3 pos1 = terrainGenerator.CellToWorld(target.cell);
+            //transform.position = new Vector3(pos1.x, pos1.y, transform.position.z);
+        }
+    }
+
+    void ManagePath()
+    {
+        if (targetDir.magnitude< 2.56f)
+        {
+            PathNode next = target.prior;
+            if (next != null)
             {
-                // if (openSet[i].fC)
+                target = next;
+            } else
+            {
+                SelectTarget();
             }
         }
-        //terrainGenerator.IsWater();
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector2 direction = new Vector2(0, 0);
-        Vector2 targetPos3 = target.GetComponent<Transform>().position;
+        Vector2 targetPos3 = terrainGenerator.CellToWorld(target.cell);
         Vector2 targetPos = new Vector2(targetPos3.x, targetPos3.y);
         Vector2 thisPos2 = new Vector2(transform.position.x, transform.position.y);
         Vector2 targetDir = (targetPos - thisPos2);
         float targetRot = math.atan2(targetPos.x - transform.position.x, targetPos.y - transform.position.y) * 180 / math.PI;
         //print(targetRot);
-        float offRot = (targetRot - transform.rotation.eulerAngles.z);
+        float offRot = (-targetRot - transform.rotation.eulerAngles.z) % 360;
+        offRot = (offRot + 360) % 360;
         /*print(targetRot);
         print(transform.rotation.eulerAngles);
         print(offRot);*/
-        if (offRot < -30 && Math.Abs(rb2D.angularVelocity) < 30)
+        // print(offRot);
+        if (offRot <= 180 && offRot > 10)// && Math.Abs(rb2D.angularVelocity) > 30)
         {
             direction.x += 1;
-        } else if ((offRot > 30) && Math.Abs(rb2D.angularVelocity) < 30)
+        } else if (offRot > 180 && offRot < 350)// && Math.Abs(rb2D.angularVelocity) <= 30)
         {
             direction.x -= 1;
         }
 
-        direction.y = (360 - math.abs(offRot)) / 360f;
+        direction.y = (math.abs(180 - offRot) / 180f) * target.depth * 2; //(target.depth * 0.3f + 0.1f); //(360 - math.abs(offRot)) / 360f;
         //direction.x = offRot / 10;
         // if (transform.position.y <
         //direction.x = UnityEngine.Random.Range(-1f, 1f);
         base.ApplyForce(direction);
 
-        transform.rotation = Quaternion.Euler(0, 0, -targetRot);
+        //rb2D.MoveRotation(-targetRot);
+        //transform.rotation = Quaternion.Euler(0, 0, -targetRot);
+
+        if (targetDir.magnitude < 2.26)
+        {
+            PathNode nextTarget = target.prior;
+            if (nextTarget != null)
+            {
+                target = nextTarget;
+            } else
+            {
+                Path result = new Path();
+                int count = 0;
+                while ((result == null || result.currentNode == null) && count < 1)
+                {
+                    count++;
+                    pathStart = new Vector2(transform.position.x, transform.position.y);
+                    pathEnd = new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
+                        transform.position.y + UnityEngine.Random.Range(-100f, 100f));
+                    result = terrainGenerator.AStar(
+                        pathEnd,
+                        pathStart
+                        );
+                }
+                if (result != null && result.currentNode != null)
+                {
+                    target = result.currentNode;
+                    //Vector3 pos1 = terrainGenerator.CellToWorld(target.cell);
+                    //transform.position = new Vector3(pos1.x, pos1.y, transform.position.z);
+                }
+            }
+        }
 
         base.Run();
     }
