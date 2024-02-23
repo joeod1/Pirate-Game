@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Unity.Mathematics;
+using TMPro;
 
 namespace Assets
 {
@@ -12,6 +13,7 @@ namespace Assets
     {
         long seed;
         int numPorts;
+        public TextMeshProUGUI textUI;
         Vector2Int bounds = new Vector2Int(1000, 1000);
 
         public TerrainGeneration terrainGenerator;
@@ -38,7 +40,7 @@ namespace Assets
         };
         public void PlacePorts()
         {
-            print(bounds);
+            // print(bounds);
             for (int i = 0; i < numPorts; i++)
             {
                 // find coastal.. this should be moved into terraingeneration
@@ -47,10 +49,10 @@ namespace Assets
                     (int)(noise.snoise(new float2(i * 1000, i * 1000 + seed)) * bounds.y),
                     0);
                 int direction = (int)(math.abs(noise.snoise(new float2(i, seed * 1000))) * cellOffsets.Length);
-                print(direction);
+                // print(direction);
 
-                print(cell);
-                print(noise.snoise(new float2(i * 1000 + seed, i * 1000)) * (float)bounds.x);
+                // print(cell);
+                // print(noise.snoise(new float2(i * 1000 + seed, i * 1000)) * (float)bounds.x);
 
                 Vector3Int offset = cellOffsets[direction];
                 while (terrainGenerator.IsWater(cell) || !terrainGenerator.IsWater(cell + offset))
@@ -62,7 +64,9 @@ namespace Assets
                 newPort.transform.position = terrainGenerator.CellToWorld(cell);
                 Port portData = newPort.GetComponent<Port>();
                 portData.cell = cell;
-                print(cell);
+                portData.GenerateName(i, seed);
+                portData.uiText = textUI; //.GetComponent<PortCollisions>().uiText = textUI;
+                // print(cell);
                 if (!terrainGenerator.portCells.ContainsKey(cell))
                 {
                     terrainGenerator.portCells.Add(cell, true);

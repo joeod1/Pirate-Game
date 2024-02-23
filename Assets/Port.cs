@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Assets
@@ -15,6 +17,9 @@ namespace Assets
         public Vector3Int dockCell;
 
         [Header("Relations")]
+        public string name;
+        public int3 nameAssembly;
+        public TextMeshProUGUI uiText;
         public bool pirateFriendly = false;
         public Dictionary<string, float> pirateRelations;
 
@@ -37,6 +42,85 @@ namespace Assets
         {
             cell = inputCell;
             pirateFriendly = friendly;
+        }
+
+        static Dictionary<int3, bool> namesGenerated = new Dictionary<int3, bool>();
+
+        static string[] prefixes = { 
+            "Port", "Fort", "Camp"
+        };
+        static string[] suffixes = {
+            "Cove", "Respite", "Bay", "Castle", "City", "Coast", "Hideout", "Capital", "Seaport", "Harbor", "Haven", "Marina"
+        };
+        static string[] names = {
+            "Sandy", "Sponge", "Starfish", "Stink", "Chip", "Deadman", "Junior", "Drowning", "Balloon", 
+            "Computer", "Microprocessor", "Pyramid Scheme", "Echo", "Tacky", "Bludgeon", "Request Timeout",
+            "Bond", "Michael", "Skeleton", "Winter", "Liberty", "E", "Chocolate", "Nite", "Knight", "Blueberry",
+            "Banana", "Hamburger", "Automobile", "Microwave Oven", "Chicken", "Yugoslavia", "Slovenia", "Serbia",
+            "North Macedonia", "Greece", "Juice", "Blooper", "Sludge", "Muck", "Name", "Legend", "User Interface",
+            "Minced", "Grater", "Cheese", "Bling", "Argument", "Photograph", "Trades-a-lot", "Video Gamer",
+            "Jim", "Watery", "Hotdog", "Filler", "Casino", "Slots Machine", "Roulette Wheel", "Imagination",
+            "Happiness", "Jump", "Blind", "Ex-Wife", "Landlock", "Dishonesty", "Smidgen", "Copyright Law",
+            "Strawberry", "Fisherman", "Useless", "Irate", "Danger", "Pepper", "Slime", "Styrofoam", "Jeepers Creepers",
+            "I can't come up with a name", "Wrestling Champ", "Critical Acclaim", "Judicial", "Low Battery",
+            "Unplayable", "Ten Frames", "Procedural", "Jubwub", "Down by the", "Hairier", "er, Harry", "Parrot",
+            "Requirements", "Scrum", "Agile", "Craft", "Blub", "Soda", "Caffeine", "Ceramic", "Whammy", "Rock",
+            "Boulder", "Market", "Cohort", "Short", "Turkey Dinner", "Mac'n'Cheese", "Discovery", "Poison",
+            "Hotwire", "Intermission", "Marco", "Polo", "Lost", "Apprehensive", "Silly Billy", "Retail Store",
+            "Station Wagon", "Zumzazoo", "Thingamabob", "Whozeewhatsit", "Whirligig", "Nick-Nack", "Witch"
+        };
+        public void GenerateName(int i, long seed)
+        {
+            float noiseValue = math.abs(noise.snoise(new float2(i * 100, seed * 1000)));
+            nameAssembly = new int3();
+
+            // Select the default name
+            nameAssembly[2] = (int)(noiseValue * 2); // whether prefix (1) or suffix (0)
+            if (nameAssembly[2] == 1)
+            {
+                nameAssembly[0] = (int)(noiseValue * prefixes.Length); // prefix;
+            } else
+            {
+                nameAssembly[0] = (int)(noiseValue * suffixes.Length); // suffix
+            }
+            nameAssembly[1] = (int)(noiseValue * names.Length); // name
+
+            // Iterate main part until name is unique OR we loop back to where we started
+            int og = nameAssembly[1];
+            while (namesGenerated.ContainsKey(nameAssembly) && (nameAssembly[1] + 1 != og)) nameAssembly[1] = (nameAssembly[1] + 1) % names.Length;
+
+            // Iterate -fix until the name is unique OR we loop back to where we started
+            og = nameAssembly[0];
+            int limit = (nameAssembly[2] == 1) ? prefixes.Length : suffixes.Length;
+            while (namesGenerated.ContainsKey(nameAssembly) && (nameAssembly[0] + 1 != og)) nameAssembly[0] = (nameAssembly[0] + 1) % limit;
+
+            // Sad
+            if (namesGenerated.ContainsKey(nameAssembly))
+            {
+                print("Failed to make a unique name for " + i);
+            }
+            namesGenerated[nameAssembly] = true;
+
+            // Convert name to string
+            if (nameAssembly[2] == 1)
+            {
+                name = prefixes[nameAssembly[0]] + " " + names[nameAssembly[1]];
+            } else
+            {
+                name = names[nameAssembly[1]] + " " + suffixes[nameAssembly[0]];
+            }
+            gameObject.name = name;
+
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            uiText.text = "at " + name;
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            uiText.text = "";
         }
     }
 }

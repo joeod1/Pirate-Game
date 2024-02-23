@@ -33,7 +33,7 @@ public class PlayerShipController : ShipController
     {
         base.Init();
         terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(10, 10));
-        terrainGenerator.AStar(point1.position, point2.position);
+        // terrainGenerator.AStar(point1.position, point2.position);
     }
 
     // Update is called once per frame
