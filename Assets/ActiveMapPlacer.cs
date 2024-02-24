@@ -18,6 +18,7 @@ namespace Assets
 
         public TerrainGeneration terrainGenerator;
         public GameObject port;
+        public GameObject shipPrefab;
         public Transform portContainer;
 
         public ActiveMapPlacer(long seed = 0, int numPorts = 5) {
@@ -64,13 +65,23 @@ namespace Assets
                 newPort.transform.position = terrainGenerator.CellToWorld(cell);
                 Port portData = newPort.GetComponent<Port>();
                 portData.cell = cell;
+                portData.dockCell = cell + offset;
+                portData.terrainGenerator = terrainGenerator;
                 portData.GenerateName(i, seed);
                 portData.uiText = textUI; //.GetComponent<PortCollisions>().uiText = textUI;
+                portData.shipPrefab = shipPrefab;
                 // print(cell);
                 if (!terrainGenerator.portCells.ContainsKey(cell))
                 {
                     terrainGenerator.portCells.Add(cell, true);
                 }
+
+                Port.ports.Add(portData);
+            }
+
+            foreach (Port port in Port.ports)
+            {
+                port.PathToPorts();
             }
         }
 

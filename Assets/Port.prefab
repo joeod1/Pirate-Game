@@ -169,7 +169,12 @@ MonoBehaviour:
   terrainGenerator: {fileID: 0}
   cell: {x: 0, y: 0, z: 0}
   dockCell: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
   name: 
+  nameAssembly:
+    x: 0
+    y: 0
+    z: 0
   uiText: {fileID: 0}
   pirateFriendly: 0
   wealth: 0
@@ -177,7 +182,9 @@ MonoBehaviour:
   drink: 0
   gold: 0
   production: 0
+  shipPrefab: {fileID: 0}
   ships: []
+  shipsContainer: {fileID: 0}
 --- !u!58 &1134071242644695188
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -212,4 +219,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3.072
+  m_Radius: 5.072

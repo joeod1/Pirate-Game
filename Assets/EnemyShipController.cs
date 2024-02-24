@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -18,28 +19,37 @@ public class EnemyShipController : ShipController
     public Vector2 pathStart;
     public Vector2 pathEnd;
 
+    public Vector2 destinationForViewing;
+
     private Vector2 from;
     private Vector2 targetDir;
+
+    public bool thinkingForSelf = false;
 
     // Start is called before the first frame update
     void Start()
     {
         base.Init();
-        Path result = new Path();
-        int count = 0;
-        while ((result == null || result.currentNode == null) && count < 50)
+
+        if (thinkingForSelf)
         {
-            count++;
-            result = terrainGenerator.AStar(
-                new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
-                transform.position.x + UnityEngine.Random.Range(-100f, 100f)),
-                new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
-                transform.position.x + UnityEngine.Random.Range(-100f, 100f))
-                );
+            Path result = new Path();
+            int count = 0;
+
+            while ((result == null || result.currentNode == null) && count < 50)
+            {
+                count++;
+                result = terrainGenerator.AStar(
+                    new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
+                    transform.position.x + UnityEngine.Random.Range(-100f, 100f)),
+                    new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
+                    transform.position.x + UnityEngine.Random.Range(-100f, 100f))
+                    );
+            }
+            target = result.currentNode;
+            Vector3 pos1 = terrainGenerator.CellToWorld(target.cell);
+            transform.position = new Vector3(pos1.x, pos1.y, transform.position.z);
         }
-        target = result.currentNode;
-        Vector3 pos1 = terrainGenerator.CellToWorld(target.cell);
-        transform.position = new Vector3(pos1.x, pos1.y, transform.position.z);
     }
     /*
     void ReconstructPath(Vector2 from, )
@@ -73,7 +83,8 @@ public class EnemyShipController : ShipController
 
     void MoveToNode(PathNode node)
     {
-        MoveToCell(node.cell, node.depth);
+        if (node != null)
+            MoveToCell(node.cell, node.depth);
     }
 
     void SelectTarget()
@@ -103,13 +114,16 @@ public class EnemyShipController : ShipController
     {
         if (targetDir.magnitude< 2.56f)
         {
+            if (target == null) return;
             PathNode next = target.prior;
             if (next != null)
             {
+                destinationForViewing = terrainGenerator.CellToWorld(target.cell);
                 target = next;
             } else
             {
-                SelectTarget();
+                if (thinkingForSelf)
+                    SelectTarget();
             }
         }
     }
@@ -117,6 +131,22 @@ public class EnemyShipController : ShipController
     // Update is called once per frame
     void Update()
     {
+        /*
+        if (target == null)
+        {
+            Destroy(gameObject);
+        }
+        MoveToNode(target);
+        ManagePath();*/
+
+        if (target == null)
+        {
+            print("Target is null");
+            return;
+        }
+        
+
+        
         Vector2 direction = new Vector2(0, 0);
         Vector2 targetPos3 = terrainGenerator.CellToWorld(target.cell);
         Vector2 targetPos = new Vector2(targetPos3.x, targetPos3.y);
@@ -130,6 +160,7 @@ public class EnemyShipController : ShipController
         print(transform.rotation.eulerAngles);
         print(offRot);*/
         // print(offRot);
+        
         if (offRot <= 180 && offRot > 10)// && Math.Abs(rb2D.angularVelocity) > 30)
         {
             direction.x += 1;
@@ -138,7 +169,7 @@ public class EnemyShipController : ShipController
             direction.x -= 1;
         }
 
-        direction.y = (math.abs(180 - offRot) / 180f) * target.depth * 2; //(target.depth * 0.3f + 0.1f); //(360 - math.abs(offRot)) / 360f;
+        direction.y = (math.abs(180 - offRot) / 180f) * target.depth * 2 + 0.2f; //(target.depth * 0.3f + 0.1f); //(360 - math.abs(offRot)) / 360f;
         //direction.x = offRot / 10;
         // if (transform.position.y <
         //direction.x = UnityEngine.Random.Range(-1f, 1f);
@@ -155,7 +186,8 @@ public class EnemyShipController : ShipController
                 target = nextTarget;
             } else
             {
-                Path result = new Path();
+                target = null;
+                /*Path result = new Path();
                 int count = 0;
                 while ((result == null || result.currentNode == null) && count < 1)
                 {
@@ -173,9 +205,11 @@ public class EnemyShipController : ShipController
                     target = result.currentNode;
                     //Vector3 pos1 = terrainGenerator.CellToWorld(target.cell);
                     //transform.position = new Vector3(pos1.x, pos1.y, transform.position.z);
-                }
+                }*/
             }
         }
+
+
 
         base.Run();
     }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Mathematics;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Assets
@@ -17,11 +18,16 @@ namespace Assets
         public Vector3Int dockCell;
 
         [Header("Relations")]
+        public GameObject player;
         public string name;
         public int3 nameAssembly;
         public TextMeshProUGUI uiText;
         public bool pirateFriendly = false;
         public Dictionary<string, float> pirateRelations;
+
+        [Header("Other Ports")]
+        static public List<Port> ports = new List<Port>();
+        public Dictionary<Port, Path> paths;
 
         [Header("Wealth")]
         public float wealth;
@@ -31,7 +37,9 @@ namespace Assets
         public int production; // change to enum; produces two of [wood, food, drink, gold]
 
         [Header("Ships")]
+        public GameObject shipPrefab;
         public List<EnemyShipController> ships;
+        public Transform shipsContainer;
 
         // what if wood is produced by chopping down wood cells?
         // create a dictionary and iterate through the cells rendered in terraingenerator
@@ -42,6 +50,41 @@ namespace Assets
         {
             cell = inputCell;
             pirateFriendly = friendly;
+            paths = new Dictionary<Port, Path>();
+            ports.Add(this);
+        }
+
+        public void PathToPorts()
+        {
+            print(ports.Count);
+            paths = new Dictionary<Port, Path>();
+            print(paths);
+            foreach (Port port in ports)
+            {
+                if (port == this) continue;
+                if (dockCell == null) print("No dockCell?");
+                if (port.dockCell == null) print("No dockCell on other port?");
+                if (port != null)
+                    paths.Add(port, terrainGenerator.AStar(port.dockCell, dockCell, count: 2500));
+
+            }
+            DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
+        }
+
+        public void DeployTradeShip(Port destination)
+        {
+            print("Deploying trade ship");
+            if (paths.ContainsKey(destination) && paths[destination].currentNode != null && paths[destination].currentNode.prior != null)
+            {
+                GameObject ship = Instantiate(shipPrefab, shipsContainer);
+                EnemyShipController controller = ship.GetComponent<EnemyShipController>();
+                controller.terrainGenerator = terrainGenerator;
+
+                controller.homePort = this;
+                controller.fromPort = destination;
+                ship.transform.position = terrainGenerator.CellToWorld(paths[destination].currentNode.cell);
+                controller.target = paths[destination].currentNode;
+            }
         }
 
         static Dictionary<int3, bool> namesGenerated = new Dictionary<int3, bool>();
@@ -67,7 +110,8 @@ namespace Assets
             "Requirements", "Scrum", "Agile", "Craft", "Blub", "Soda", "Caffeine", "Ceramic", "Whammy", "Rock",
             "Boulder", "Market", "Cohort", "Short", "Turkey Dinner", "Mac'n'Cheese", "Discovery", "Poison",
             "Hotwire", "Intermission", "Marco", "Polo", "Lost", "Apprehensive", "Silly Billy", "Retail Store",
-            "Station Wagon", "Zumzazoo", "Thingamabob", "Whozeewhatsit", "Whirligig", "Nick-Nack", "Witch"
+            "Station Wagon", "Zumzazoo", "Thingamabob", "Whozeewhatsit", "Whirligig", "Nick-Nack", "Witch",
+            "Whatchamacallit", "Plasma Television", "Air Circulation", "Leftovers", ""
         };
         public void GenerateName(int i, long seed)
         {
@@ -115,12 +159,23 @@ namespace Assets
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            uiText.text = "at " + name;
+            if (collision.gameObject.name == "PlayerShip")
+                uiText.text = "at " + name;
+            else
+            {
+                EnemyShipController controller = collision.gameObject.GetComponent<EnemyShipController>();
+                do
+                    collision.GetComponent<EnemyShipController>().target = paths.Values.ToArray()[
+                        (int)UnityEngine.Random.Range(0, paths.Values.Count)
+                    ].currentNode;
+                while (controller.target == null || controller.target.prior == null);
+            }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            uiText.text = "";
+            if (collision.gameObject.name == "PlayerShip")
+                uiText.text = "";
         }
     }
 }

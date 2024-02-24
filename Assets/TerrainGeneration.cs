@@ -127,12 +127,16 @@ public class TerrainGeneration : MonoBehaviour
         new Vector3Int(0, -1), new Vector3Int(-1, -1),
         new Vector3Int(0, 1), new Vector3Int(-1, 1),
     };
-    public Path AStar(Vector2 start, Vector2 end)
+    public Path AStar(Vector2 start, Vector2 end, int count = 2500)
     {
-        PathNode startNode = new PathNode();
-        startNode.cell = WorldToCell(start);
-        PathNode endNode = new PathNode();
-        endNode.cell = WorldToCell(end);
+        return AStar(WorldToCell(start), WorldToCell(end), count);
+    }
+    public Path AStar(Vector3Int start, Vector3Int end, int count = 2500)
+    {
+        PathNode startNode = new PathNode(start);
+        // startNode.cell = start;
+        PathNode endNode = new PathNode(end);
+        // endNode.cell = end;
 
         if (!IsWater(startNode.cell) || !IsWater(endNode.cell)) return null;
 
@@ -142,7 +146,7 @@ public class TerrainGeneration : MonoBehaviour
 
         print("Beginning A*");
 
-        while (open.Count > 0 && closed.Count < 2500)
+        while (open.Count > 0 && closed.Count < count)
         {
             PathNode node = open[0];
             for (int i = 1; i < open.Count; i++)
@@ -178,18 +182,18 @@ public class TerrainGeneration : MonoBehaviour
                         uncollidable.SetTile(node1.cell, mountains);
                     }
                 }*/
-                
+                /*
                 PathNode bottom = node;
                 uncollidable.SetTile(bottom.cell, forest);
                 bottom = bottom.prior;
                 //print(bottom.cell);
-                while (bottom.prior != null)
+                while (bottom != null && bottom.prior != null)
                 {
                     uncollidable.SetTile(bottom.cell, mountains);
                     bottom = bottom.prior;
                 }
                 //print(bottom.cell);
-                uncollidable.SetTile(bottom.cell, plains);
+                uncollidable.SetTile(bottom.cell, plains);*/
 
                 return path;
             }
@@ -231,6 +235,10 @@ public class TerrainGeneration : MonoBehaviour
                 }
 
                 adjacentCell.depth = math.abs((terrainValue + 1f));// * (1f / waterLevel));
+                if (adjacentCell.depth > 0.5f)
+                {
+                    adjacentCell.depth = 0.5f;
+                }
                 //print(terrainValue + 1f);
                 float temp = (1f - adjacentCell.depth);
                 
