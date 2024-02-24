@@ -10,12 +10,17 @@ using UnityEngine.UIElements;
 
 public class TerrainGeneration : MonoBehaviour
 {
-    [Header("Generation")]
+    [Header("Config")]
+    public Config config;
+
+    // Handled by Config now... Should it show here, too?
+    /* [Header("Generation")]
     public float waterLevel = 0.15f;
     public float featureSize = 7f;
     public float featureSizeVariation = 1.0f;
     public float featureSizeVariationFrequency = 7f;
     public float biomeSize = 32f;
+    public Vector2Int bounds; */
 
     [Header("Tilemaps")]
     public Tilemap collidable;
@@ -42,27 +47,32 @@ public class TerrainGeneration : MonoBehaviour
     public bool IsWater(Vector2 position)
     {
         Vector3Int cellPos = collidable.WorldToCell(position);
-        return GetTerrainValue(cellPos.y, cellPos.x) <= waterLevel;
+        return GetTerrainValue(cellPos.y, cellPos.x) <= config.waterLevel;
     }
     public bool IsWater(Vector3Int cellPos)
     {
-        return GetTerrainValue(cellPos.y, cellPos.x) <= waterLevel;
+        return GetTerrainValue(cellPos.y, cellPos.x) <= config.waterLevel;
     }
 
     public bool IsWater(int row, int col)
     {
-        return GetTerrainValue(row, col) <= waterLevel;
+        return GetTerrainValue(row, col) <= config.waterLevel;
     }
 
     public float GetTerrainValue(int row, int col)
     {
+        if (row < -config.bounds.y || row > config.bounds.y || col < -config.bounds.x || col > config.bounds.y) return -1;
+
+        row += (int)config.seed;
+        col -= (int)config.seed;
+
         float tmp = (
                     noise.snoise(
                         new float2(
-                            (col) / featureSizeVariationFrequency,
-                            (row) / featureSizeVariationFrequency)
+                            (col) / config.featureSizeVariationFrequency,
+                            (row) / config.featureSizeVariationFrequency)
                         )
-                    ) * (featureSizeVariation
+                    ) * (config.featureSizeVariation
                         * (
                             500f / (
                                 Vector2.zero
@@ -70,7 +80,7 @@ public class TerrainGeneration : MonoBehaviour
                             ).magnitude
                         )
                     );
-        float val = noise.snoise(new float2(col / (featureSize + tmp), row / (featureSize + tmp)));
+        float val = noise.snoise(new float2(col / (config.featureSize + tmp), row / (config.featureSize + tmp)));
         return val;
     }
 
@@ -214,7 +224,7 @@ public class TerrainGeneration : MonoBehaviour
                 }
 
                 float terrainValue = GetTerrainValue(adjacentCell.cell.y, adjacentCell.cell.x);
-                if (terrainValue >= waterLevel || closed.ContainsKey(adjacentCell.cell))
+                if (terrainValue >= config.waterLevel || closed.ContainsKey(adjacentCell.cell))
                 {
                     continue;
                 }
@@ -277,9 +287,9 @@ public class TerrainGeneration : MonoBehaviour
                 }
 
                 float val = GetTerrainValue(row, col);
-                if (val >= waterLevel)
+                if (val >= config.waterLevel)
                 {
-                    float tileType = val * noise.snoise(new float2(col / biomeSize, row / biomeSize)) * 1.2f;
+                    float tileType = val * noise.snoise(new float2(col / config.biomeSize, row / config.biomeSize)) * 1.2f;
                     UnityEngine.Tilemaps.Tile tile;
                     if (tileType < 0.1)
                     {

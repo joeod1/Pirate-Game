@@ -42,10 +42,11 @@ public class ShipController : MonoBehaviour
     }
 
     // Move the ship; directions.x is turning, and directions.y is forward.
-    protected void ApplyForce(Vector2 directions)
+    protected void ApplyForce(Vector2 directions, float dt)
     {
-        rb2D.AddRelativeForce(new Vector2(0, directions.y * forwardSpeed));
-        rb2D.AddTorque(directions.x * turningSpeed);
+        dt *= 200;
+        rb2D.AddRelativeForce(new Vector2(0, directions.y * forwardSpeed * dt));
+        rb2D.AddTorque(directions.x * turningSpeed * dt);
     }
 
     protected void Run()

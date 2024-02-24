@@ -820,6 +820,37 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &819313963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 819313964}
+  m_Layer: 0
+  m_Name: UntetheredLogic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &819313964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 819313963}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.9265394, y: -10.967221, z: -0.22123998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &951487305
 GameObject:
   m_ObjectHideFlags: 0
@@ -996,6 +1027,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1896060332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1406707088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1406707089}
+  - component: {fileID: 1406707090}
+  m_Layer: 0
+  m_Name: Config
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1406707089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406707088}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.9265394, y: -10.967221, z: -0.22123998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1406707090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406707088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04515eba1de742a49b8100b1bbc91882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounds: {x: 100, y: 100}
+  seed: -1
+  numPorts: 25
+  waterLevel: 0.35
+  featureSize: 20
+  featureSizeVariation: 0.25
+  featureSizeVariationFrequency: 12
+  biomeSize: 32
 --- !u!1 &1415858046
 GameObject:
   m_ObjectHideFlags: 0
@@ -1367,11 +1450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1f70b0dc831a3409e9a39508448246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterLevel: 0.4
-  featureSize: 35
-  featureSizeVariation: 0.8
-  featureSizeVariationFrequency: 15
-  biomeSize: 32
+  config: {fileID: 0}
   collidable: {fileID: 299633218}
   uncollidable: {fileID: 794420481}
   ground: {fileID: 11400000, guid: aee732d35069dd24faf060c200577a17, type: 2}
@@ -1925,7 +2004,7 @@ Transform:
   m_GameObject: {fileID: 1896060331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -45.473347, y: 6.4533367, z: -45.359856}
+  m_LocalPosition: {x: -45.473347, y: 6.4533367, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1952,9 +2031,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textUI: {fileID: 1813274686}
+  config: {fileID: 1406707090}
   terrainGenerator: {fileID: 1744168646}
   port: {fileID: 5469521324606078364, guid: 38b607dac3f8b2741937c40c3d9fae0e, type: 3}
   shipPrefab: {fileID: 7875122886169044039, guid: ca65ea4c9e49f09409afe45e444d6339, type: 3}
+  shipsContainer: {fileID: 1415858047}
   portContainer: {fileID: 679024604}
   cellOffsets:
   - {x: -1, y: 0, z: 0}
@@ -1968,3 +2049,5 @@ SceneRoots:
   - {fileID: 1584295290}
   - {fileID: 239223688}
   - {fileID: 1896060332}
+  - {fileID: 819313964}
+  - {fileID: 1406707089}

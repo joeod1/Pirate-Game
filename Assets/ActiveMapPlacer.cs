@@ -11,26 +11,31 @@ namespace Assets
 {
     public class ActiveMapPlacer : MonoBehaviour
     {
-        long seed;
-        int numPorts;
+        // long seed;
+        // int numPorts;
         public TextMeshProUGUI textUI;
-        Vector2Int bounds = new Vector2Int(1000, 1000);
+        // Vector2Int bounds = new Vector2Int(100, 100);
 
+        public Config config;
         public TerrainGeneration terrainGenerator;
         public GameObject port;
         public GameObject shipPrefab;
+        public Transform shipsContainer;
         public Transform portContainer;
 
         public ActiveMapPlacer(long seed = 0, int numPorts = 5) {
-            this.seed = seed;
-            this.numPorts = numPorts;
+            // bounds = new Vector2Int(100, 100);
+            // this.seed = seed;
+            // this.numPorts = numPorts;
         }
 
         public void Start()
         {
-            bounds = new Vector2Int(100, 100);
-            seed = 10;
-            numPorts = 10;
+            // bounds = new Vector2Int(100, 100);
+            // terrainGenerator.bounds = bounds;
+            terrainGenerator.config = config;
+            // seed = 10;
+            // numPorts = 20;
             PlacePorts();
         }
 
@@ -42,23 +47,27 @@ namespace Assets
         public void PlacePorts()
         {
             // print(bounds);
-            for (int i = 0; i < numPorts; i++)
+            for (int i = 0; i < config.numPorts; i++)
             {
                 // find coastal.. this should be moved into terraingeneration
                 Vector3Int cell = new Vector3Int(
-                    (int)(noise.snoise(new float2(i * 1000 + seed, i * 1000)) * bounds.x),
-                    (int)(noise.snoise(new float2(i * 1000, i * 1000 + seed)) * bounds.y),
+                    (int)(noise.snoise(new float2(i * 1000 + config.seed, i * 1000)) * config.bounds.x / 2),
+                    (int)(noise.snoise(new float2(i * 1000, i * 1000 + config.seed)) * config.bounds.y / 2),
                     0);
-                int direction = (int)(math.abs(noise.snoise(new float2(i, seed * 1000))) * cellOffsets.Length);
+                int direction = (int)(math.abs(noise.snoise(new float2(i, config.seed * 1000))) * cellOffsets.Length);
                 // print(direction);
 
                 // print(cell);
                 // print(noise.snoise(new float2(i * 1000 + seed, i * 1000)) * (float)bounds.x);
 
+                Vector3Int original = cell;
                 Vector3Int offset = cellOffsets[direction];
                 while (terrainGenerator.IsWater(cell) || !terrainGenerator.IsWater(cell + offset))
                 {
                     cell += offset;
+                    //cell.x = (cell.x + config.bounds.x * 2) % config.bounds.x * 2 - config.bounds.x;
+                    //cell.y = (cell.y + config.bounds.y * 2) % config.bounds.y * 2 - config.bounds.y;
+                    if (cell == original) break;
                 }
 
                 GameObject newPort = Instantiate(port, portContainer);
@@ -67,7 +76,8 @@ namespace Assets
                 portData.cell = cell;
                 portData.dockCell = cell + offset;
                 portData.terrainGenerator = terrainGenerator;
-                portData.GenerateName(i, seed);
+                portData.shipsContainer = shipsContainer;
+                portData.GenerateName(i, (long)config.seed);
                 portData.uiText = textUI; //.GetComponent<PortCollisions>().uiText = textUI;
                 portData.shipPrefab = shipPrefab;
                 // print(cell);

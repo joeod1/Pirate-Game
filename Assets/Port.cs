@@ -65,10 +65,13 @@ namespace Assets
                 if (dockCell == null) print("No dockCell?");
                 if (port.dockCell == null) print("No dockCell on other port?");
                 if (port != null)
+                {
                     paths.Add(port, terrainGenerator.AStar(port.dockCell, dockCell, count: 2500));
+                    if (paths[port].currentNode == null) paths.Remove(port);
+                }
 
             }
-            DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
+            DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Values.Count - 1)]);
         }
 
         public void DeployTradeShip(Port destination)
@@ -160,15 +163,33 @@ namespace Assets
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.name == "PlayerShip")
+            {
                 uiText.text = "at " + name;
+                DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
+            }
+            //else
+            //{
+            //}
+        }
+
+        int countdownToAnother = 50;
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            if (collision.gameObject.name == "PlayerShip") { }
             else
             {
                 EnemyShipController controller = collision.gameObject.GetComponent<EnemyShipController>();
-                do
-                    collision.GetComponent<EnemyShipController>().target = paths.Values.ToArray()[
-                        (int)UnityEngine.Random.Range(0, paths.Values.Count)
-                    ].currentNode;
-                while (controller.target == null || controller.target.prior == null);
+
+                if (controller.target == null || controller.target.cell == dockCell || (controller.target.prior != null && controller.target.prior.cell == dockCell))
+                {
+                    countdownToAnother = (countdownToAnother + 1) % 150;
+                    if (controller.target.cell == dockCell && countdownToAnother == 0) DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
+                    do
+                        collision.GetComponent<EnemyShipController>().target = paths.Values.ToArray()[
+                            (int)UnityEngine.Random.Range(0, paths.Values.Count)
+                        ].currentNode;
+                    while (controller.target == null || controller.target.prior == null);
+                }
             }
         }
 

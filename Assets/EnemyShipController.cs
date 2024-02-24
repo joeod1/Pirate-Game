@@ -73,7 +73,7 @@ public class EnemyShipController : ShipController
         }
         direction.y = (math.abs(180 - offRotation) / 180f) * (target.depth * 0.3f + 0.1f);
 
-        base.ApplyForce(direction);
+        base.ApplyForce(direction, Time.deltaTime);
     }
 
     void MoveToCell(Vector3Int targetCell, float depth)
@@ -173,7 +173,7 @@ public class EnemyShipController : ShipController
         //direction.x = offRot / 10;
         // if (transform.position.y <
         //direction.x = UnityEngine.Random.Range(-1f, 1f);
-        base.ApplyForce(direction);
+        base.ApplyForce(direction, Time.deltaTime);
 
         //rb2D.MoveRotation(-targetRot);
         //transform.rotation = Quaternion.Euler(0, 0, -targetRot);

@@ -112,7 +112,7 @@ public class PlayerShipController : ShipController
         if (Input.GetKey(KeyCode.W)) direction.y = 1;
         if (Input.GetKey(KeyCode.A)) direction.x += 1;
         if (Input.GetKey(KeyCode.D)) direction.x -= 1;
-        base.ApplyForce(direction);
+        base.ApplyForce(direction, Time.deltaTime);
         base.Run();
 
         cameraTransform.position = transform.position - new Vector3(0, 0, 5);
