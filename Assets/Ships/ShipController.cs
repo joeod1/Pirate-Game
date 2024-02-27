@@ -39,6 +39,16 @@ public class ShipController : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
     }
 
+    public void FireCannons(List<Cannon> cannons)
+    {
+        print("Got into the main FireCannons call");
+        foreach (Cannon cannon in cannons)
+        {
+            print("Trying to fire a cannon");
+            cannon.Fire();
+        }
+    }
+
     void UpdateModelRotation()
     {
         float primaryAngle = -transform.rotation.eulerAngles.z - 90f;

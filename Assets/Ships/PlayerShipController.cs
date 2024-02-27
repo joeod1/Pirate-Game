@@ -118,6 +118,17 @@ public class PlayerShipController : ShipController
         base.ApplyForce(direction, Time.deltaTime);
         base.Run();
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            print("Okay? We're trying");
+            base.FireCannons(portSideCannons);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            print("Okay? We're trying");
+            base.FireCannons(starboardSideCannons);
+        }
+
         cameraTransform.position = transform.position - new Vector3(0, 0, 5);
     }
 }
