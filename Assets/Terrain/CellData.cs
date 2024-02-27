@@ -11,5 +11,6 @@ namespace Assets
     {
         public float direction;
         public int numOccupying;
+        public int maxOccupancy;
     }
 }

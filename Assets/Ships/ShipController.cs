@@ -1,3 +1,4 @@
+using Assets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,14 @@ public class ShipController : MonoBehaviour
     public Transform shipModel;
     public float horizontalAngle;
     public float verticalAngle;
+
+    [Header("Status")]
+    public TradeResources cargo;
+    public float health;
+
+    [Header("Combat")]
+    public List<Cannon> portSideCannons = new List<Cannon>(); // left side
+    public List<Cannon> starboardSideCannons = new List<Cannon>(); // right side
 
     // Start is called before the first frame update
     void Start()

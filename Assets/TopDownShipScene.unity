@@ -585,7 +585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710c050912e4ec941b5616e1164f0908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiText: {fileID: 0}
+  uiText: {fileID: 1813274686}
 --- !u!1001 &732271537
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1074,10 +1074,10 @@ MonoBehaviour:
   bounds: {x: 100, y: 100}
   seed: -1
   numPorts: 25
-  waterLevel: 0.35
-  featureSize: 20
-  featureSizeVariation: 0.25
-  featureSizeVariationFrequency: 12
+  waterLevel: 0.4
+  featureSize: 15
+  featureSizeVariation: 0.1
+  featureSizeVariationFrequency: 8
   biomeSize: 32
 --- !u!1 &1415858046
 GameObject:
@@ -1450,7 +1450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1f70b0dc831a3409e9a39508448246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
+  config: {fileID: 1406707090}
   collidable: {fileID: 299633218}
   uncollidable: {fileID: 794420481}
   ground: {fileID: 11400000, guid: aee732d35069dd24faf060c200577a17, type: 2}
@@ -1620,23 +1620,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1780345233}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abfdf5518cd2a444489d460b74e0ca64, type: 3}
+  m_Script: {fileID: 11500000, guid: c958c2325a250144899c971fca1c3b80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardSpeed: 1
+  forwardSpeed: 2
   turningSpeed: 0.25
   shipModel: {fileID: 732271538}
   horizontalAngle: 45
   verticalAngle: 45
+  health: 0
+  portSideCannons: []
+  starboardSideCannons: []
   camera: {fileID: 1067402618}
   cameraTransform: {fileID: 1067402619}
   cameraSizeNormal: 6
   cameraSizeMap: 100
   terrainGenerator: {fileID: 1744168646}
   renderBounds: {x: 24, y: 20}
-  mapModeBounds: {x: 180, y: 120}
-  point1: {fileID: 1577829338}
-  point2: {fileID: 951487307}
+  mapModeBounds: {x: 200, y: 200}
+  point1: {fileID: 0}
+  point2: {fileID: 0}
 --- !u!96 &1780345239
 TrailRenderer:
   serializedVersion: 3

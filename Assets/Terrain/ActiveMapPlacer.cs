@@ -49,10 +49,12 @@ namespace Assets
             // print(bounds);
             for (int i = 0; i < config.numPorts; i++)
             {
+
+                int count = 0;
                 // find coastal.. this should be moved into terraingeneration
                 Vector3Int cell = new Vector3Int(
-                    (int)(noise.snoise(new float2(i * 1000 + config.seed, i * 1000)) * config.bounds.x / 2),
-                    (int)(noise.snoise(new float2(i * 1000, i * 1000 + config.seed)) * config.bounds.y / 2),
+                    (int)(noise.snoise(new float2(i * 1000 + config.seed, i * 1000)) * (config.bounds.x - 15)),
+                    (int)(noise.snoise(new float2(i * 1000, i * 1000 + config.seed)) * (config.bounds.y - 15)),
                     0);
                 int direction = (int)(math.abs(noise.snoise(new float2(i, config.seed * 1000))) * cellOffsets.Length);
                 // print(direction);
@@ -62,8 +64,9 @@ namespace Assets
 
                 Vector3Int original = cell;
                 Vector3Int offset = cellOffsets[direction];
-                while (terrainGenerator.IsWater(cell) || !terrainGenerator.IsWater(cell + offset))
+                while (terrainGenerator.IsWater(cell) || !terrainGenerator.IsWater(cell + offset) && count < config.bounds.y)
                 {
+                    count++;
                     cell += offset;
                     //cell.x = (cell.x + config.bounds.x * 2) % config.bounds.x * 2 - config.bounds.x;
                     //cell.y = (cell.y + config.bounds.y * 2) % config.bounds.y * 2 - config.bounds.y;
@@ -77,7 +80,7 @@ namespace Assets
                 portData.dockCell = cell + offset;
                 portData.terrainGenerator = terrainGenerator;
                 portData.shipsContainer = shipsContainer;
-                portData.GenerateName(i, (long)config.seed);
+                portData.GenerateName(cell.x * 15 + cell.y * 10, (long)config.seed);
                 portData.uiText = textUI; //.GetComponent<PortCollisions>().uiText = textUI;
                 portData.shipPrefab = shipPrefab;
                 // print(cell);

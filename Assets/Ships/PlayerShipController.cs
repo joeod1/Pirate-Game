@@ -32,7 +32,10 @@ public class PlayerShipController : ShipController
     void Start()
     {
         base.Init();
-        terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(10, 10));
+        if (terrainGenerator.config != null)
+        {
+            terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(10, 10));
+        }
         // terrainGenerator.AStar(point1.position, point2.position);
     }
 

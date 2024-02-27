@@ -66,7 +66,7 @@ namespace Assets
                 if (port.dockCell == null) print("No dockCell on other port?");
                 if (port != null)
                 {
-                    paths.Add(port, terrainGenerator.AStar(port.dockCell, dockCell, count: 2500));
+                    paths.Add(port, terrainGenerator.AStar(port.dockCell, dockCell, count: 25000));
                     if (paths[port].currentNode == null) paths.Remove(port);
                 }
 
