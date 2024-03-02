@@ -1,0 +1,20 @@
+{
+    "prefixes": ["Port", "Fort", "Camp"],
+    "suffixes": ["Cove", "Respite", "Bay", "Castle", "City", "Coast", "Hideout", "Capital", "Seaport", "Harbor", "Haven", "Marina"],
+    "names": ["Sandy", "Sponge", "Starfish", "Stink", "Chip", "Deadman", "Junior", "Drowning", "Balloon", 
+    "Computer", "Microprocessor", "Pyramid Scheme", "Echo", "Tacky", "Bludgeon", "Request Timeout",
+    "Bond", "Michael", "Skeleton", "Winter", "Liberty", "E", "Chocolate", "Nite", "Knight", "Blueberry",
+    "Banana", "Hamburger", "Automobile", "Microwave Oven", "Chicken", "Yugoslavia", "Slovenia", "Serbia",
+    "North Macedonia", "Greece", "Juice", "Blooper", "Sludge", "Muck", "Name", "Legend", "User Interface",
+    "Minced", "Grater", "Cheese", "Bling", "Argument", "Photograph", "Trades-a-lot", "Video Gamer",
+    "Jim", "Watery", "Hotdog", "Filler", "Casino", "Slots Machine", "Roulette Wheel", "Imagination",
+    "Happiness", "Jump", "Blind", "Ex-Wife", "Landlock", "Dishonesty", "Smidgen", "Copyright Law",
+    "Strawberry", "Fisherman", "Useless", "Irate", "Danger", "Pepper", "Slime", "Styrofoam", "Jeepers Creepers",
+    "I can't come up with a name", "Wrestling Champ", "Critical Acclaim", "Judicial", "Low Battery",
+    "Unplayable", "Ten Frames", "Procedural", "Jubwub", "Down by the", "Hairier", "er, Harry", "Parrot",
+    "Requirements", "Scrum", "Agile", "Craft", "Blub", "Soda", "Caffeine", "Ceramic", "Whammy", "Rock",
+    "Boulder", "Market", "Cohort", "Short", "Turkey Dinner", "Mac'n'Cheese", "Discovery", "Poison",
+    "Hotwire", "Intermission", "Marco", "Polo", "Lost", "Apprehensive", "Silly Billy", "Retail Store",
+    "Station Wagon", "Zumzazoo", "Thingamabob", "Whozeewhatsit", "Whirligig", "Nick-Nack", "Witch",
+    "Whatchamacallit", "Plasma Television", "Air Circulation", "Leftovers"]
+}
