@@ -20,9 +20,10 @@ public class ShipController : MonoBehaviour
     public Transform shipModel;
     public float horizontalAngle;
     public float verticalAngle;
+    public Vector2 offAxis = new Vector2(0, 0);
 
     [Header("Status")]
-    public TradeResources cargo;
+    public TradeResources cargo = new TradeResources();
     public float health;
 
     [Header("Combat")]
@@ -54,10 +55,11 @@ public class ShipController : MonoBehaviour
         float primaryAngle = -transform.rotation.eulerAngles.z - 90f;
 
         shipModel.rotation = Quaternion.Euler(primaryAngle, 90f, -90f);
-        shipModel.Rotate(new Vector3(0f, 0f, (horizontalAngle * math.sin((primaryAngle + 90) / 57.23f))
+        shipModel.Rotate(new Vector3(0f, 0f, (horizontalAngle * math.sin((primaryAngle + 90 + offAxis.x) / 57.23f))
             + math.sin(Time.realtimeSinceStartup / 2f) * 10f - 5f));
-        shipModel.Rotate(new Vector3((verticalAngle * math.sin((primaryAngle + 180) / 57.23f))
+        shipModel.Rotate(new Vector3((verticalAngle * math.sin((primaryAngle + 180 + offAxis.y) / 57.23f))
             + math.sin(Time.realtimeSinceStartup / 1f) * 5f - 2.5f, 0f, 0f));
+        offAxis /= 1.005f;
     }
 
     // Move the ship; directions.x is turning, and directions.y is forward.

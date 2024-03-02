@@ -32,6 +32,7 @@ public class PlayerShipController : ShipController
     void Start()
     {
         base.Init();
+        cargo.quantities[Assets.ResourceType.Wood] = 100;
         if (terrainGenerator.config != null)
         {
             terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(10, 10));

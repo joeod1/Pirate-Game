@@ -22,6 +22,7 @@ namespace Assets
         public GameObject shipPrefab;
         public Transform shipsContainer;
         public Transform portContainer;
+        public PortNames portNames;
 
         public ActiveMapPlacer(long seed = 0, int numPorts = 5) {
             // bounds = new Vector2Int(100, 100);
@@ -39,13 +40,21 @@ namespace Assets
             PlacePorts();
         }
 
-        public Vector3Int[] cellOffsets = {
+        public PortNames LoadPortNames(string filename)
+        {
+            String contents = System.IO.File.ReadAllText(filename);
+            return JsonUtility.FromJson<PortNames>(contents);
+
+        }
+
+        public List<Vector3Int> cellOffsets = new List<Vector3Int>{
             new Vector3Int(-1, 0), new Vector3Int(1, 0),
             new Vector3Int(0, -1),
             new Vector3Int(0, 1)
         };
         public void PlacePorts()
         {
+            portNames = LoadPortNames("portnames.json");
             // print(bounds);
             for (int i = 0; i < config.numPorts; i++)
             {
@@ -56,7 +65,7 @@ namespace Assets
                     (int)(noise.snoise(new float2(i * 1000 + config.seed, i * 1000)) * (config.bounds.x - 15)),
                     (int)(noise.snoise(new float2(i * 1000, i * 1000 + config.seed)) * (config.bounds.y - 15)),
                     0);
-                int direction = (int)(math.abs(noise.snoise(new float2(i, config.seed * 1000))) * cellOffsets.Length);
+                int direction = (int)(math.abs(noise.snoise(new float2(i, config.seed * 1000))) * cellOffsets.Count);
                 // print(direction);
 
                 // print(cell);
@@ -80,6 +89,7 @@ namespace Assets
                 portData.dockCell = cell + offset;
                 portData.terrainGenerator = terrainGenerator;
                 portData.shipsContainer = shipsContainer;
+                portData.portNames = portNames;
                 portData.GenerateName(cell.x * 15 + cell.y * 10, (long)config.seed);
                 portData.uiText = textUI; //.GetComponent<PortCollisions>().uiText = textUI;
                 portData.shipPrefab = shipPrefab;

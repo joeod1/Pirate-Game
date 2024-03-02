@@ -37,9 +37,12 @@ namespace Assets
         {
             print("Firing cannon!");
             GameObject projectile = Instantiate(CannonBallPrefab);
+            projectile.SetActive(true);
             projectile.transform.position = this.transform.position;
             Rigidbody2D rb2D = projectile.GetComponent<Rigidbody2D>();
             rb2D.AddForce(this.transform.up * speed);
+            CannonBall projectileController = projectile.GetComponent<CannonBall>();
+            projectileController.parent = this.GetComponentInParent<ShipController>();
         }
     }
 }

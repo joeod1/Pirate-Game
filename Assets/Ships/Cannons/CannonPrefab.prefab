@@ -62,6 +62,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CannonBallPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 1285028577954460482, guid: 5d6a16b58c7e4144cabac57fa8157c06, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7421900413603925543, guid: 5d6a16b58c7e4144cabac57fa8157c06, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

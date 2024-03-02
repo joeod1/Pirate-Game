@@ -19,6 +19,7 @@ namespace Assets
         [Header("Relations")]
         public GameObject player;
         public string name;
+        public PortNames portNames;
         public int3 nameAssembly;
         public TextMeshProUGUI uiText;
         public bool pirateFriendly = false;
@@ -91,7 +92,7 @@ namespace Assets
 
         static Dictionary<int3, bool> namesGenerated = new Dictionary<int3, bool>();
 
-        static string[] prefixes = { 
+        /*static string[] prefixes = { 
             "Port", "Fort", "Camp"
         };
         static string[] suffixes = {
@@ -114,7 +115,7 @@ namespace Assets
             "Hotwire", "Intermission", "Marco", "Polo", "Lost", "Apprehensive", "Silly Billy", "Retail Store",
             "Station Wagon", "Zumzazoo", "Thingamabob", "Whozeewhatsit", "Whirligig", "Nick-Nack", "Witch",
             "Whatchamacallit", "Plasma Television", "Air Circulation", "Leftovers", ""
-        };
+        };*/
         public void GenerateName(int i, long seed)
         {
             float noiseValue = math.abs(noise.snoise(new float2(i * 100, seed * 1000)));
@@ -124,20 +125,20 @@ namespace Assets
             nameAssembly[2] = (int)(noiseValue * 2); // whether prefix (1) or suffix (0)
             if (nameAssembly[2] == 1)
             {
-                nameAssembly[0] = (int)(noiseValue * prefixes.Length); // prefix;
+                nameAssembly[0] = (int)(noiseValue * portNames.prefixes.Count); // prefix;
             } else
             {
-                nameAssembly[0] = (int)(noiseValue * suffixes.Length); // suffix
+                nameAssembly[0] = (int)(noiseValue * portNames.suffixes.Count); // suffix
             }
-            nameAssembly[1] = (int)(noiseValue * names.Length); // name
+            nameAssembly[1] = (int)(noiseValue * portNames.names.Count); // name
 
             // Iterate main part until name is unique OR we loop back to where we started
             int og = nameAssembly[1];
-            while (namesGenerated.ContainsKey(nameAssembly) && (nameAssembly[1] + 1 != og)) nameAssembly[1] = (nameAssembly[1] + 1) % names.Length;
+            while (namesGenerated.ContainsKey(nameAssembly) && (nameAssembly[1] + 1 != og)) nameAssembly[1] = (nameAssembly[1] + 1) % portNames.names.Count;
 
             // Iterate -fix until the name is unique OR we loop back to where we started
             og = nameAssembly[0];
-            int limit = (nameAssembly[2] == 1) ? prefixes.Length : suffixes.Length;
+            int limit = (nameAssembly[2] == 1) ? portNames.prefixes.Count : portNames.suffixes.Count;
             while (namesGenerated.ContainsKey(nameAssembly) && (nameAssembly[0] + 1 != og)) nameAssembly[0] = (nameAssembly[0] + 1) % limit;
 
             // Sad
@@ -150,10 +151,10 @@ namespace Assets
             // Convert name to string
             if (nameAssembly[2] == 1)
             {
-                name = prefixes[nameAssembly[0]] + " " + names[nameAssembly[1]];
+                name = portNames.prefixes[nameAssembly[0]] + " " + portNames.names[nameAssembly[1]];
             } else
             {
-                name = names[nameAssembly[1]] + " " + suffixes[nameAssembly[0]];
+                name = portNames.names[nameAssembly[1]] + " " + portNames.suffixes[nameAssembly[0]];
             }
             gameObject.name = name;
 
