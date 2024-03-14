@@ -13,17 +13,18 @@ namespace Assets
         Wood, Food, Oranges, Gold, Water, Drink, CannonBalls
     }
 
+
     public class TradeResources
     {
         public Dictionary<ResourceType, int> quantities = new Dictionary<ResourceType, int>
         {
-            { ResourceType.Wood, 1000 },
-            { ResourceType.Food, 0 },
-            { ResourceType.Oranges, 0 },
+            { ResourceType.Wood, 0 },
+            { ResourceType.Food, 50 },
+            { ResourceType.Oranges, 5 },
             { ResourceType.Gold, 0 },
-            { ResourceType.Water, 0 },
-            { ResourceType.Drink, 0 },
-            { ResourceType.CannonBalls, 0 },
+            { ResourceType.Water, 50 },
+            { ResourceType.Drink, 10 },
+            { ResourceType.CannonBalls, 50 },
         };
 
         public Dictionary<CannonBallType, int> cannonballs =

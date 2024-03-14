@@ -1,3 +1,4 @@
+using Assets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +24,10 @@ public class PlayerShipController : ShipController
     public Vector2Int mapModeBounds = new Vector2Int(200, 200);
     private Vector2Int currentBounds;
     private bool renderedChunkZoomOut;
+    public ShipController boardingRadiusShip;
+    public Port boardingRadiusPort;
+    public ShipSideGenerator sideGenerator;
+    public ActiveMapPlacer topdownGenerator;
 
     public Transform point1;
     public Transform point2;
@@ -38,6 +43,13 @@ public class PlayerShipController : ShipController
             terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(10, 10));
         }
         // terrainGenerator.AStar(point1.position, point2.position);
+    }
+
+    public void OnBoardingRadiusEntered(ShipController ship)
+    {
+        boardingRadiusShip = ship;
+        // StartCoroutine(sideGenerator.coGenerateShip(boardingRadiusShip));
+
     }
 
     // Update is called once per frame
@@ -91,6 +103,27 @@ public class PlayerShipController : ShipController
             lerpCamera = -1f;
             terrainGenerator.ClearPlusRender(transform.position, renderBounds);
         }*/
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (boardingRadiusShip != null)
+            {
+                for (int i = 0; i < topdownGenerator.transform.childCount; i++)
+                {
+                    topdownGenerator.transform.GetChild(i).gameObject.SetActive(false);
+                }
+                topdownGenerator.gameObject.SetActive(false);
+                /*for (int i = 0; i < sideGenerator.transform.childCount; i++)
+                {
+                    if (sideGenerator.transform.GetChild(i).name != "Plane")
+                        sideGenerator.transform.GetChild(i).gameObject.SetActive(true);
+                }*/
+                camera.enabled = false;
+                sideGenerator.GetComponentInChildren<Camera>().enabled = true;
+                // sideGenerator.transform.Find("Characters").gameObject.SetActive(true);
+                //camera.gameObject.SetActive(false);
+            }
+        }
 
         if (Input.mouseScrollDelta.y != 0)
         {

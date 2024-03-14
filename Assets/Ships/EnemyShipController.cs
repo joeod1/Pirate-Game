@@ -13,6 +13,9 @@ public class EnemyShipController : ShipController
 {
     public PathNode target;
     public TerrainGeneration terrainGenerator;
+    // public GameObject circle;
+    //public GameObject healthBar;
+     // public GameObject healthMeter;
     public Assets.Port homePort;
     public Assets.Port fromPort;
     public Vector2 pathStart;
@@ -29,6 +32,8 @@ public class EnemyShipController : ShipController
     void Start()
     {
         base.Init();
+
+        name = NameGenerator.GenerateName(new float2(transform.position.x, transform.position.y), nameMap);
 
         if (thinkingForSelf)
         {
@@ -127,9 +132,38 @@ public class EnemyShipController : ShipController
         }
     }
 
+    public override void DamageShip(float dmg)
+    {
+        health -= dmg;
+        if (health <= 0) health = 0;
+        if (health < 100)
+        {
+            healthBar.SetActive(true);
+            healthMeter.transform.localScale = new Vector3(health / 100, 1);
+            healthMeter.transform.localPosition = new Vector3(health / 200 - 0.5f, 0);
+        }
+        if (health < 20)
+        {
+            rb2D.drag = 1000 / (20 - health);
+            if (!circle.GetComponent<Renderer>().enabled)
+            {
+                circle.GetComponent<Renderer>().enabled = true;
+                // circle.GetComponent<Renderer>().material.SetFloat("Radius", 0.2f);
+                StartCoroutine(boardingCircle.TweenRadius());//ExpandBoarding());
+                // circle.SetActive(true);
+            }
+            return;
+        }
+        if (health == 0)
+        {
+            healthBar.SetActive(false);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        
         /*
         if (target == null)
         {

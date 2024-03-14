@@ -5,6 +5,7 @@ using UnityEngine;
 public class TempPlayerController : MonoBehaviour
 {
     public Rigidbody2D rb2dD;
+    public Animator animator;
     public Camera camera;
     public int platformLayer;
     public int onLadder = 0;
@@ -45,6 +46,11 @@ public class TempPlayerController : MonoBehaviour
             rb2dD.drag = 1;
             rb2dD.gravityScale = 1f;
             // rb2dD = null;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            animator.SetTrigger("Swinging");
         }
 
 

@@ -171,12 +171,20 @@ MonoBehaviour:
   dockCell: {x: 0, y: 0, z: 0}
   player: {fileID: 0}
   name: 
+  portNames:
+    prefixes: []
+    suffixes: []
+    names: []
   nameAssembly:
     x: 0
     y: 0
     z: 0
   uiText: {fileID: 0}
   pirateFriendly: 0
+  citizens: 0
+  residents: 0
+  defenseNeed: 0
+  shipNeed: 0
   wealth: 0
   food: 0
   drink: 0

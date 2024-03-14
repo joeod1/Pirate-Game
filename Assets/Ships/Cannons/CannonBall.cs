@@ -22,18 +22,29 @@ namespace Assets
     {
         public float damage = 10;
         public ShipController parent;
+        private Rigidbody2D rb2D;
+
+        private void Start()
+        {
+            rb2D = GetComponent<Rigidbody2D>();
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             ShipController controller = collision.GetComponentInParent<ShipController>();
             if (controller != null)
                 if (controller != parent)
                 {
-                    controller.health -= damage;
-
-                    float cannonRot = transform.rotation.eulerAngles.z;
-                    float shipRot = controller.transform.rotation.eulerAngles.z;
-                    float offRot = ((cannonRot - shipRot + 360) % 360);
-                    controller.offAxis += new Vector2(math.sin(offRot) * 30, math.cos(offRot) * 30);//45f * math.sin((offRot + 90) / 57.23f), 45f * math.sin((offRot + 180) / 57.23f));
+                    controller.DamageShip(damage);
+                    // controller.health -= damage;
+                    // float upDir = transform.up;
+                    // rb2D.rotation
+                    float cannonRot = math.atan2(rb2D.velocity.x, rb2D.velocity.y);
+                    print(cannonRot);
+                    float shipRot = collision.transform.rotation.z; //controller.transform.rotation.z;
+                    float offRot = cannonRot - shipRot;
+                    // print(offRot);
+                    controller.offAxis += new Vector2(math.sin(cannonRot) * -10, math.cos(cannonRot) * 10);//45f * math.sin((offRot + 90) / 57.23f), 45f * math.sin((offRot + 180) / 57.23f));
                 }
                 else return;
 

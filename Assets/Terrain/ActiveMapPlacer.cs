@@ -18,11 +18,12 @@ namespace Assets
 
         public Config config;
         public TerrainGeneration terrainGenerator;
+        public ShipSideGenerator shipSideGenerator;
         public GameObject port;
         public GameObject shipPrefab;
         public Transform shipsContainer;
         public Transform portContainer;
-        public PortNames portNames;
+        public NameMap portNames;
 
         public ActiveMapPlacer(long seed = 0, int numPorts = 5) {
             // bounds = new Vector2Int(100, 100);
@@ -35,15 +36,16 @@ namespace Assets
             // bounds = new Vector2Int(100, 100);
             // terrainGenerator.bounds = bounds;
             terrainGenerator.config = config;
+            shipSideGenerator.transform.position = new Vector3(config.bounds.x * 6, config.bounds.y * 6, 0);
             // seed = 10;
             // numPorts = 20;
             PlacePorts();
         }
 
-        public PortNames LoadPortNames(string filename)
+        public NameMap LoadPortNames(string filename)
         {
             String contents = System.IO.File.ReadAllText(filename);
-            return JsonUtility.FromJson<PortNames>(contents);
+            return JsonUtility.FromJson<NameMap>(contents);
 
         }
 
@@ -89,8 +91,8 @@ namespace Assets
                 portData.dockCell = cell + offset;
                 portData.terrainGenerator = terrainGenerator;
                 portData.shipsContainer = shipsContainer;
-                portData.portNames = portNames;
-                portData.GenerateName(cell.x * 15 + cell.y * 10, (long)config.seed);
+                // portData.portNames = portNames;
+                portData.GeneratePortInfo();//cell.x * 15 + cell.y * 10, (long)config.seed);
                 portData.uiText = textUI; //.GetComponent<PortCollisions>().uiText = textUI;
                 portData.shipPrefab = shipPrefab;
                 // print(cell);
