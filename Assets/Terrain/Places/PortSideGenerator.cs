@@ -5,5 +5,8 @@ using UnityEngine;
 
 public class PortSideGenerator : Behaviour
 {
-    
+    public void CreateFloor()
+    {
+
+    }
 }
