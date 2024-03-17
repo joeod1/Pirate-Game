@@ -40,7 +40,8 @@ public class PlayerShipController : ShipController
         cargo.quantities[Assets.ResourceType.Wood] = 100;
         if (terrainGenerator.config != null)
         {
-            terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(10, 10));
+            renderBounds = new Vector2Int(100, 100);
+            terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(100, 100));
         }
         // terrainGenerator.AStar(point1.position, point2.position);
     }
@@ -50,6 +51,25 @@ public class PlayerShipController : ShipController
         boardingRadiusShip = ship;
         // StartCoroutine(sideGenerator.coGenerateShip(boardingRadiusShip));
 
+    }
+
+    public override void DamageShip(float damage, ShipController attacker)
+    {
+        switch(Config.difficulty)
+        {
+            case 0:
+                damage /= 2;
+                break;
+            case 1:
+                // don't need to do anything!
+                break;
+            case 2:
+                damage *= 2; // the enemies are stronger than us??
+                break;
+            default:
+                break;
+        }
+        health -= damage;
     }
 
     // Update is called once per frame

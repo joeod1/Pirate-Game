@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2314279728032615847}
   - component: {fileID: 1068013775523090265}
   - component: {fileID: 4164977221153758976}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CannonBallPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 32
+    m_Bits: 544
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -94,7 +94,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 32
+    m_Bits: 544
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -173,7 +173,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1300598701500768035}
   - component: {fileID: 3420940289086702436}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

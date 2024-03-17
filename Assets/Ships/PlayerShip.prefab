@@ -169,7 +169,15 @@ MonoBehaviour:
   shipModel: {fileID: 5409370673207879557}
   horizontalAngle: 45
   verticalAngle: 45
+  offAxis: {x: 0, y: 0}
+  name: hms fun
   health: 0
+  floating: 100
+  circle: {fileID: 0}
+  boardingCircle: {fileID: 0}
+  sank: 0
+  healthBar: {fileID: 0}
+  healthMeter: {fileID: 0}
   portSideCannons:
   - {fileID: 3860124301875247726}
   starboardSideCannons: []
@@ -180,6 +188,10 @@ MonoBehaviour:
   terrainGenerator: {fileID: 0}
   renderBounds: {x: 24, y: 20}
   mapModeBounds: {x: 200, y: 200}
+  boardingRadiusShip: {fileID: 0}
+  boardingRadiusPort: {fileID: 0}
+  sideGenerator: {fileID: 0}
+  topdownGenerator: {fileID: 0}
   point1: {fileID: 0}
   point2: {fileID: 0}
 --- !u!96 &3858624581835800305
@@ -596,6 +608,10 @@ PrefabInstance:
     - target: {fileID: 6605784784708039685, guid: 8672e64a2a4754a4e97cdaa5abcbcce0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018138548201926555, guid: 8672e64a2a4754a4e97cdaa5abcbcce0, type: 3}
+      propertyPath: primed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7018138548201926555, guid: 8672e64a2a4754a4e97cdaa5abcbcce0, type: 3}
       propertyPath: speed.x

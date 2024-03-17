@@ -106,7 +106,7 @@ namespace Assets
 
                 controller.homePort = this;
                 controller.fromPort = destination;
-                ship.transform.position = terrainGenerator.CellToWorld(paths[destination].currentNode.cell);
+                ship.transform.position = paths[destination].currentNode.position;//terrainGenerator.CellToWorld(paths[destination].currentNode.cell);
                 controller.target = paths[destination].currentNode;
             }
         }
@@ -193,7 +193,7 @@ namespace Assets
             if (collision.gameObject.name == "PlayerShip")
             {
                 uiText.text = "at " + name;
-                DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
+                // DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
             }
             //else
             //{
@@ -210,12 +210,15 @@ namespace Assets
                 if (controller == null) return;
                 if (controller.target == null || controller.target.cell == dockCell || (controller.target.prior != null && controller.target.prior.cell == dockCell))
                 {
-                    countdownToAnother = (countdownToAnother + 1) % 150;
-                    if (controller.target.cell == dockCell && countdownToAnother == 0) DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
+                    // countdownToAnother = (countdownToAnother + 1) % 150;
+                    // if (controller.target.cell == dockCell && countdownToAnother == 0) DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
                     do
-                        collision.GetComponent<EnemyShipController>().target = paths.Values.ToArray()[
+                    {
+                        controller.target = paths.Values.ToArray()[
                             (int)UnityEngine.Random.Range(0, paths.Values.Count)
                         ].currentNode;
+                        controller.targetPos = terrainGenerator.CellToWorld(controller.target.cell);
+                    }
                     while (controller.target == null || controller.target.prior == null);
                 }
             }

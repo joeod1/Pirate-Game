@@ -33,6 +33,9 @@ public class TerrainGeneration : MonoBehaviour
     public Tile plains;
     public Tile water;
 
+    [Header("Debug")]
+    public GameObject debugMarker;
+
     Dictionary<Vector3Int, CellData> occupiedCells = new Dictionary<Vector3Int, CellData>();
     public Dictionary<Vector3Int, bool> portCells = new Dictionary<Vector3Int, bool>();
 
@@ -173,6 +176,18 @@ public class TerrainGeneration : MonoBehaviour
                 // Logic to retrace path
                 Path path = new Path();
                 path.currentNode = node;
+
+                /*PathNode womp = path.currentNode;
+                while (womp != null)
+                {
+                    // print("ends at " + path.currentNode.position + ": " + womp.position);
+                    if (womp.prior.position == Vector2.zero)
+                    {
+                        womp.prior = null;
+                    }
+                    womp = womp.prior;
+                }
+
                 /*
 
                 foreach (KeyValuePair<Vector3Int, PathNode> node1 in closed)
@@ -191,14 +206,16 @@ public class TerrainGeneration : MonoBehaviour
                         uncollidable.SetTile(node1.cell, mountains);
                     }
                 }*/
-                /*
-                PathNode bottom = node;
+                
+               /* PathNode bottom = node;
                 uncollidable.SetTile(bottom.cell, forest);
                 bottom = bottom.prior;
                 //print(bottom.cell);
                 while (bottom != null && bottom.prior != null)
                 {
                     uncollidable.SetTile(bottom.cell, mountains);
+                    //GameObject marker = Instantiate(debugMarker);
+                    //marker.transform.position = bottom.position;
                     bottom = bottom.prior;
                 }
                 //print(bottom.cell);
@@ -254,6 +271,7 @@ public class TerrainGeneration : MonoBehaviour
                 float newG = node.g + Vector3.Distance(node.cell, adjacentCell.cell) * temp;
                 if (newG < adjacentCell.g || !openContains)
                 {
+                    adjacentCell.position = CellToWorld(adjacentCell.cell);
                     adjacentCell.g = newG;
                     adjacentCell.h = Vector3.Distance(node.cell, endNode.cell) * (1f - temp + 0.5f);// - terrainValue * 10f;
                     adjacentCell.prior = node;
