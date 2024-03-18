@@ -15,6 +15,7 @@ public class PlayerShipController : ShipController
     public float cameraSizeNormal = 6f;
     public float cameraSizeMap = 100f;
     private float lerpCamera = 0f;
+    public TMPro.TMP_Text healthText;
 
     [Header("World")]
     public TerrainGeneration terrainGenerator;
@@ -64,12 +65,13 @@ public class PlayerShipController : ShipController
                 // don't need to do anything!
                 break;
             case 2:
-                damage *= 2; // the enemies are stronger than us??
+                damage *= 2; // the enemies are stronger than us
                 break;
             default:
                 break;
         }
         health -= damage;
+        healthText.text = (int)health + "/" + (int)maxHealth;
     }
 
     // Update is called once per frame

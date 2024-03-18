@@ -43,7 +43,7 @@ public class NewGame : MonoBehaviour
 
         mainCamera.orthographicSize = 12;
         mapPlacer.enabled = true;
-        generator.RenderBlock(new Vector2(0, 0), new Vector2Int(40, 30));
+        generator.ClearPlusRender(new Vector2(0, 0), new Vector2Int(40, 30));
         newGameMenu.gameObject.SetActive(false);
     }
 
