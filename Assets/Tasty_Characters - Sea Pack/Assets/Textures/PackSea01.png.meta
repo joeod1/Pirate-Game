@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5cf1b4629c7cb104e98d369448084abd
+guid: 8f5f1decbe77e4449982625d330c4764
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -355,6 +355,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1028,8 +1041,8 @@ TextureImporter:
         y: 680
         width: 29
         height: 44
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+      alignment: 9
+      pivot: {x: 0.88, y: 0.9}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1070,8 +1083,8 @@ TextureImporter:
         y: 683
         width: 19
         height: 48
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+      alignment: 9
+      pivot: {x: 0.35, y: 0.925}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1322,8 +1335,8 @@ TextureImporter:
         y: 565
         width: 61
         height: 85
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+      alignment: 9
+      pivot: {x: 0.9, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2283,7 +2296,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 1b8355e869d7d044183925edf422ba73
     internalID: 0
     vertices: []
     indices: 
@@ -2382,6 +2395,7 @@ TextureImporter:
       PackSea01_89: 21300178
       PackSea01_9: 21300018
       PackSea01_90: 21300180
+      PackSea01_91: 1306201722
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

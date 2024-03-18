@@ -29,8 +29,7 @@ public class EnemyShipController : ShipController
     private float targetDepth = 0.5f;
 
     [Header("Defenses")]
-    public GameObject cannonPrefab;
-    public int cannonCount = 20;
+    // public int cannonCount = 20;
     public float fightReadiness = 0; // -1 is flight, 0 is defensive, 1 is offensive
     public ShipController attacking;
 
@@ -69,27 +68,6 @@ public class EnemyShipController : ShipController
         }
     }
 
-    void PlaceCannons()
-    {
-        int mid = cannonCount / 2;
-        for (int i = 0; i < cannonCount; i++)
-        {
-            GameObject cannon = Instantiate(cannonPrefab, transform);
-            cannon.SetActive(true);
-            float edgePos = (i % mid) / (float)mid;
-            if (i < mid)
-            {
-                cannon.transform.localPosition = new Vector3(0.4f, edgePos - 0.33f, 0);
-                cannon.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                starboardSideCannons.Add(cannon.GetComponent<Cannon>());
-            } else
-            {
-                cannon.transform.localPosition = new Vector3(-0.4f, edgePos - 0.33f, 0);
-                cannon.transform.localRotation = Quaternion.Euler(0, 0, -90);
-                portSideCannons.Add(cannon.GetComponent<Cannon>());
-            }
-        }
-    }
     /*
     void ReconstructPath(Vector2 from, )
     {
@@ -120,6 +98,7 @@ public class EnemyShipController : ShipController
 
     void MoveToTarget(Vector2 targetPos3, float depth)
     {
+        // rotate the ship to look at the target
         Vector2 direction = new Vector2(0, 0);
         // Vector2 targetPos3 = terrainGenerator.CellToWorld(target.cell);
         Vector2 targetPos = new Vector2(targetPos3.x, targetPos3.y);
@@ -128,6 +107,7 @@ public class EnemyShipController : ShipController
         float targetRot = math.atan2(targetPos.x - transform.position.x, targetPos.y - transform.position.y) * 180 / math.PI;
         float yMultiplier = 1;
 
+        // turn horizontal and shoot at attackers if it's a good idea
         bool shouldFight = FightOrFlight();
         if (shouldFight && targetDir.magnitude < 4f && floating > 0.9f)
         {
@@ -138,6 +118,7 @@ public class EnemyShipController : ShipController
             attacking = null;
         } 
 
+        // actually rotate and move
         float offRot = (-targetRot - transform.rotation.eulerAngles.z) % 360;
         offRot = (offRot + 360) % 360;
 
@@ -158,32 +139,6 @@ public class EnemyShipController : ShipController
 
 
         base.ApplyForce(direction, Time.deltaTime);
-        /*Vector2 direction = Vector2.zero;
-        from = new Vector2(transform.position.x, transform.position.y);
-        targetDir = (targetPos - from);
-        float targetRotation = math.atan2(targetPos.x - transform.position.x, targetPos.y - transform.position.y) * 180 / math.PI;
-        if (attacking != null && targetDir.magnitude < 4f && target.prior == null && floating > 90)
-        {
-            targetRotation = (targetRotation - 90) % 360;
-            FireCannons(starboardSideCannons);
-        }
-            //math.degrees(math.atan2(targetDir.x, targetDir.y));
-
-        float offRotation = (-targetRotation - transform.rotation.eulerAngles.z + 360) % 360;
-
-
-        if (offRotation <= 180 && offRotation > 10)// && Math.Abs(rb2D.angularVelocity) > 30)
-        {
-            direction.x += 1;
-        }
-        else if (offRotation > 180 && offRotation < 350)// && Math.Abs(rb2D.angularVelocity) <= 30)
-        {
-            direction.x -= 1;
-        }
-        direction.y = (math.abs(180 - offRotation) / 180f) * target.depth * 2 + 0.2f;
-        if (attacking != null && targetDir.magnitude < 4f && target.prior == null) direction.y *= 2;
-
-        base.ApplyForce(direction, Time.deltaTime);*/
     }
 
     void MoveToCell(Vector3Int targetCell, float depth)
@@ -331,15 +286,6 @@ public class EnemyShipController : ShipController
     // Update is called once per frame
     void Update()
     {
-        if (target == null)
-        {
-            print("Target is null");
-            return;
-        }
-
-        //MoveToPoint(terrainGenerator.CellToWorld(target.cell));
-        //ManagePath();//SelectNext();
-
         if (attacking != null)
         {
             targetPos = attacking.transform.position;
@@ -350,97 +296,10 @@ public class EnemyShipController : ShipController
         {
             MoveToNode(target);
 
-            //MoveToTarget(targetPos, targetDepth);
             ManagePath();
         }
 
-                /*
-                if (target == null)
-                {
-                    Destroy(gameObject);
-                }
-                MoveToNode(target);
-                ManagePath();*/
 
-                /*if (target == null)
-                {
-                    print("Target is null");
-                    return;
-                }*/
-
-
-                // transform.position = terrainGenerator.
-                /*Vector2 direction = new Vector2(0, 0);
-                Vector2 targetPos3 = target.position;//terrainGenerator.CellToWorld(target.cell);
-                Vector2 targetPos1 = new Vector2(targetPos3.x, targetPos3.y);
-                Vector2 thisPos2 = new Vector2(transform.position.x, transform.position.y);
-                Vector2 targetDir = (targetPos - thisPos2);
-                float targetRot = math.atan2(targetPos1.x - transform.position.x, targetPos1.y - transform.position.y) * 180 / math.PI;
-                print("The 'trics!");
-                print(targetDir.magnitude);
-                int random = UnityEngine.Random.Range(0, 1000000);
-                print(name + random + " from: " + thisPos2);
-                print(name + random + " to: " + target.position);
-                //print(targetRot);
-                float offRot = (-targetRot - transform.rotation.eulerAngles.z) % 360;
-                //offRot = (offRot + 360) % 360;
-                /*print(targetRot);
-                print(transform.rotation.eulerAngles);
-                print(offRot);*/
-                // print(offRot);
-                /*
-                if (offRot <= 180 && offRot > 10)// && Math.Abs(rb2D.angularVelocity) > 30)
-                {
-                    direction.x += 1;
-                } else if (offRot > 180 && offRot < 350)// && Math.Abs(rb2D.angularVelocity) <= 30)
-                {
-                    direction.x -= 1;
-                }
-
-                direction.y = (math.abs(180 - offRot) / 180f) * target.depth * 2 + 0.2f; //(target.depth * 0.3f + 0.1f); //(360 - math.abs(offRot)) / 360f;
-                //direction.x = offRot / 10;
-                // if (transform.position.y <
-                //direction.x = UnityEngine.Random.Range(-1f, 1f);
-                base.ApplyForce(direction, Time.deltaTime);
-
-                //rb2D.MoveRotation(-targetRot);
-                //transform.rotation = Quaternion.Euler(0, 0, -targetRot);
-
-                if (targetDir.magnitude < 1.26f)
-                {
-                    PathNode nextTarget = target.prior;
-                    if (nextTarget != null)
-                    {
-                        target = nextTarget;
-                        targetPos = target.position;
-                    }
-                    else
-                    {
-                        target = null;
-                        /*Path result = new Path();
-                        int count = 0;
-                        while ((result == null || result.currentNode == null) && count < 1)
-                        {
-                            count++;
-                            pathStart = new Vector2(transform.position.x, transform.position.y);
-                            pathEnd = new Vector2(transform.position.x + UnityEngine.Random.Range(-100f, 100f),
-                                transform.position.y + UnityEngine.Random.Range(-100f, 100f));
-                            result = terrainGenerator.AStar(
-                                pathEnd,
-                                pathStart
-                                );
-                        }
-                        if (result != null && result.currentNode != null)
-                        {
-                            target = result.currentNode;
-                            //Vector3 pos1 = terrainGenerator.CellToWorld(target.cell);
-                            //transform.position = new Vector3(pos1.x, pos1.y, transform.position.z);
-                        }*/
-                //}
-                //}
-
-
-
-                base.Run();
+        base.Run();
     }
 }

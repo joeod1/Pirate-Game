@@ -1,17 +1,16 @@
+using Assets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.GameCenter;
 
 public class Character : MonoBehaviour
 {
+    public Camera camera;
+
     private Rigidbody2D body;
-    private BoxCollider2D boxCollider;
+    private Collider2D boxCollider;
     private CircleCollider2D circleCollider;
     private Animator animator;
     public LayerMask layerMask;
@@ -48,6 +47,29 @@ public class Character : MonoBehaviour
 
     private float walking = 0.0f;
     private float cooldown = 50.0f;
+    public int onLadder = 0;
+
+
+    public TMPro.TMP_Text displayInfo;
+    public TradeResources playerCargo;
+    public TradeResources containerPeek;
+    public GameObject topdownMode;
+    public GameObject platformerMode;
+    public void InsightContents(TradeResources container)
+    {
+        containerPeek = container;
+        DisplayContents();
+    }
+    public void LeftContents(TradeResources container)
+    {
+        if (containerPeek != container) return;
+        containerPeek = null;
+        displayInfo.text = "";
+    }
+    public void DisplayContents()
+    {
+        displayInfo.text = containerPeek.ToString() + "Press F to take";
+    }
 
 
     // Start is called before the first frame update
@@ -58,10 +80,25 @@ public class Character : MonoBehaviour
         sword = GameObject.FindGameObjectWithTag("sword");
         gun = GameObject.FindGameObjectWithTag("gun");
         body = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
         gun.SetActive(false);
         animator.SetFloat("walkspeed", speed);
+    }
+
+    public void EnterLadder()
+    {
+        onLadder++;
+        body.gravityScale = 0f;
+        body.drag = 5f;
+        displayInfo.text = "";
+    }
+
+    public void ExitLadder()
+    {
+        onLadder--;
+        body.gravityScale = 1f;
+        body.drag = 0f;
     }
 
     //Update is called once per frame
@@ -90,11 +127,33 @@ public class Character : MonoBehaviour
         //actual actions take place in seperate functions//
         if (isPlayer)
         {
+            // loot containers //
+            // doesn't work right now
+            /*if (containerPeek != null && Input.GetKeyDown(KeyCode.F)) {
+                for (int i = 0; i < containerPeek.quantities.Keys.Count; i++)
+                {
+                    playerCargo.quantities[i] += containerPeek.quantities[i];
+                    containerPeek.quantities[i] = 0;
+                    LeftContents(containerPeek);
+                }
+                containerPeek.quantities.Clear();
+            }*/
+
+            if (transform.localPosition.y > 6)
+            {
+                displayInfo.text = "Press F to leave the ship";
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    topdownMode.SetActive(true);
+                    platformerMode.SetActive(false);
+                }
+            }
+
             //= 1 for right and = -1 for left//
             float horizontalInput = Input.GetAxis("Horizontal");
             walking = horizontalInput;  
             //track player with camera//
-            Camera.main.transform.position = transform.position - new Vector3(0, 0, 10);
+            camera.transform.position = transform.position - new Vector3(0, 0, 10);
 
             //moving left and right//
             if (isGrounded() && horizontalInput != 0)
@@ -102,15 +161,31 @@ public class Character : MonoBehaviour
 
             //for flipping sprite left and right depending on direction//
             if (horizontalInput > 0.01f)
-                transform.localScale = new Vector3(-1, 1, 1);
+                transform.localScale = new Vector3(-1, 1, 1) * 1.6f;
             else if (horizontalInput < -0.01f)
-                transform.localScale = Vector3.one;
+                transform.localScale = Vector3.one * 1.6f;
 
-            //up for jump//
-            if (Input.GetKey(KeyCode.UpArrow))
-                Jump();
-            else if (Input.GetKey(KeyCode.W))
-                Jump();
+            if (onLadder == 0)
+            {
+                //up for jump//
+                if (Input.GetKey(KeyCode.UpArrow))
+                    Jump();
+                else if (Input.GetKey(KeyCode.W))
+                    Jump();
+            } else
+            {
+                // climb up ladder //
+                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+                {
+                    body.AddForce(new Vector2(0, 3));
+                }
+
+                // climb down ladder //
+                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+                {
+                    body.AddForce(new Vector2(0, -3));
+                }
+            }
 
             //spacebar for sword swinging//
             if (Input.GetKey(KeyCode.Space))
@@ -173,7 +248,7 @@ public class Character : MonoBehaviour
 
     private bool isGrounded() {
 
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, layerMask) ;
+        RaycastHit2D raycastHit = Physics2D.CircleCast(boxCollider.bounds.center - new Vector3(0, boxCollider.bounds.size.y / 2f), 0.1f, Vector2.down, 0, layerMask);//Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, layerMask) ;
         return raycastHit.collider != null;
     }
     

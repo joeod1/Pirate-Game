@@ -1,6 +1,7 @@
 using Assets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ResourceContainer : MonoBehaviour
@@ -14,20 +15,33 @@ public class ResourceContainer : MonoBehaviour
     void Start()
     {
         trigger = GetComponent<Collider2D>();
+        print(trigger);
+    }
+
+    public void Empty()
+    {
+        for (int i = 0; i < contents.quantities.Keys.Count; i++)
+        {
+            contents.quantities[contents.quantities.Keys.ElementAt(i)] = 0;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<TempPlayerController>() != null)
+        print("We can trigger");
+        if (collision.GetComponent<Character>() != null)
         {
+            collision.GetComponent<Character>().InsightContents(contents);
             // display weight
+
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<TempPlayerController>() != null)
+        if (collision.GetComponent<Character>() != null)
         {
             // remove pop-up
+            collision.GetComponent<Character>().LeftContents(contents);
         }
     }
 }

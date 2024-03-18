@@ -18,13 +18,13 @@ namespace Assets
     {
         public Dictionary<ResourceType, int> quantities = new Dictionary<ResourceType, int>
         {
-            { ResourceType.Wood, 0 },
+            { ResourceType.Wood, 50 },
             { ResourceType.Food, 50 },
-            { ResourceType.Oranges, 5 },
-            { ResourceType.Gold, 0 },
-            { ResourceType.Water, 50 },
-            { ResourceType.Drink, 10 },
-            { ResourceType.CannonBalls, 50 },
+            { ResourceType.Oranges, 50 },
+            { ResourceType.Gold, 50 },
+            { ResourceType.Water, 100 },
+            { ResourceType.Drink, 5 },
+            { ResourceType.CannonBalls, 100 },
         };
 
         public Dictionary<CannonBallType, int> cannonballs =
@@ -66,6 +66,36 @@ namespace Assets
                 weight += WeightFromQuantity(quantity.Key, quantity.Value);
             }
             return weight;
+        }
+
+        public string ToString()
+        {
+            string resourceString = "";
+            if (quantities[ResourceType.Wood] > 0)
+            {
+                resourceString += "Wood: " + quantities[ResourceType.Wood] + "\n";
+            }
+            if (quantities[ResourceType.Food] > 0)
+            {
+                resourceString += "Food: " + quantities[ResourceType.Food] + "\n";
+            }
+            if (quantities[ResourceType.Oranges] > 0)
+            {
+                resourceString += "Oranges: " + quantities[ResourceType.Oranges] + "\n";
+            }
+            if (quantities[ResourceType.Water] > 0)
+            {
+                resourceString += "Water: " + quantities[ResourceType.Water] + "\n";
+            }
+            if (quantities[ResourceType.Drink] > 0)
+            {
+                resourceString += "Drink: " + quantities[ResourceType.Drink] + "\n";
+            }
+            if (quantities[ResourceType.CannonBalls] > 0)
+            {
+                resourceString += "CannonBalls: " + quantities[ResourceType.CannonBalls] + "\n";
+            }
+            return resourceString;
         }
     }
 }

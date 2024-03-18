@@ -35,6 +35,8 @@ public class ShipController : MonoBehaviour
     public GameObject healthMeter;
 
     [Header("Combat")]
+    public GameObject cannonPrefab;
+    public int cannonCount = 6;
     public List<Cannon> portSideCannons = new List<Cannon>(); // left side
     public List<Cannon> starboardSideCannons = new List<Cannon>(); // right side
 
@@ -64,7 +66,28 @@ public class ShipController : MonoBehaviour
             cannon.Fire();
         }
     }
-
+    public void PlaceCannons()
+    {
+        int mid = cannonCount / 2;
+        for (int i = 0; i < cannonCount; i++)
+        {
+            GameObject cannon = Instantiate(cannonPrefab, transform);
+            cannon.SetActive(true);
+            float edgePos = (i % mid) / (float)mid;
+            if (i < mid)
+            {
+                cannon.transform.localPosition = new Vector3(0.4f, edgePos - 0.33f, 0);
+                cannon.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                starboardSideCannons.Add(cannon.GetComponent<Cannon>());
+            }
+            else
+            {
+                cannon.transform.localPosition = new Vector3(-0.4f, edgePos - 0.33f, 0);
+                cannon.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                portSideCannons.Add(cannon.GetComponent<Cannon>());
+            }
+        }
+    }
     void UpdateModelRotation()
     {
         float primaryAngle = -transform.rotation.eulerAngles.z - 90f;

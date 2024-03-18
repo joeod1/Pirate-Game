@@ -15,19 +15,19 @@ public class LadderCollisions : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        TempPlayerController controller = collision.gameObject.GetComponent<TempPlayerController>();
+        Character controller = collision.gameObject.GetComponent<Character>();
         if (controller != null)
         {
-            controller.onLadder++;
+            controller.EnterLadder();
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        TempPlayerController controller = collision.gameObject.GetComponent<TempPlayerController>();
+        Character controller = collision.gameObject.GetComponent<Character>();
         if (controller != null)
         {
-            controller.onLadder--;
+            controller.ExitLadder();
         }
     }
 }

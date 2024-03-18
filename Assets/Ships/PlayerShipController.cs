@@ -16,6 +16,8 @@ public class PlayerShipController : ShipController
     public float cameraSizeMap = 100f;
     private float lerpCamera = 0f;
     public TMPro.TMP_Text healthText;
+    public TMPro.TMP_Text goldText;
+    public TMPro.TMP_Text hintText;
 
     [Header("World")]
     public TerrainGeneration terrainGenerator;
@@ -38,12 +40,13 @@ public class PlayerShipController : ShipController
     void Start()
     {
         base.Init();
-        cargo.quantities[Assets.ResourceType.Wood] = 100;
+        cargo.quantities[Assets.ResourceType.CannonBalls] = 100;
         if (terrainGenerator.config != null)
         {
             renderBounds = new Vector2Int(100, 100);
             terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(100, 100));
         }
+        UpdateHUD();
         // terrainGenerator.AStar(point1.position, point2.position);
     }
 
@@ -52,6 +55,12 @@ public class PlayerShipController : ShipController
         boardingRadiusShip = ship;
         // StartCoroutine(sideGenerator.coGenerateShip(boardingRadiusShip));
 
+    }
+
+    private void UpdateHUD()
+    {
+        healthText.text = (int)health + "/" + (int)maxHealth;
+        goldText.text = cargo.quantities[ResourceType.Gold].ToString() + " GOLD";
     }
 
     public override void DamageShip(float damage, ShipController attacker)
@@ -71,12 +80,13 @@ public class PlayerShipController : ShipController
                 break;
         }
         health -= damage;
-        healthText.text = (int)health + "/" + (int)maxHealth;
+        UpdateHUD();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // render the cells around the player if they move to a new area
         Vector3Int currentPosition = terrainGenerator.WorldToCell(transform.position);
         if ((currentPosition - knownPosition).magnitude > renderBounds.magnitude / 5f)
         {
@@ -126,27 +136,21 @@ public class PlayerShipController : ShipController
             terrainGenerator.ClearPlusRender(transform.position, renderBounds);
         }*/
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (boardingRadiusShip != null)
-            {
-                for (int i = 0; i < topdownGenerator.transform.childCount; i++)
-                {
-                    topdownGenerator.transform.GetChild(i).gameObject.SetActive(false);
-                }
-                topdownGenerator.gameObject.SetActive(false);
-                /*for (int i = 0; i < sideGenerator.transform.childCount; i++)
-                {
-                    if (sideGenerator.transform.GetChild(i).name != "Plane")
-                        sideGenerator.transform.GetChild(i).gameObject.SetActive(true);
-                }*/
-                camera.enabled = false;
-                sideGenerator.GetComponentInChildren<Camera>().enabled = true;
-                // sideGenerator.transform.Find("Characters").gameObject.SetActive(true);
-                //camera.gameObject.SetActive(false);
-            }
-        }
+        // allow ship boarding
 
+        // {
+        if (boardingRadiusShip != null && Input.GetKeyDown(KeyCode.Space))
+        {
+            // hintText.text = "PRESS SPACE TO BOARD " + boardingRadiusShip.name;
+            sideGenerator.playerShipCargo = cargo;
+            sideGenerator.playerShip = this;
+            sideGenerator.GenerateShip(boardingRadiusShip);
+            topdownGenerator.gameObject.SetActive(false);
+            sideGenerator.gameObject.SetActive(true);
+        }
+        //}
+
+        // scroll to change zoom
         if (Input.mouseScrollDelta.y != 0)
         {
             camera.orthographicSize += Input.mouseScrollDelta.y / 2f;
@@ -166,7 +170,7 @@ public class PlayerShipController : ShipController
             }
         }
 
-
+        // manual input for controls
         Vector2 direction = new Vector2(0, 0);
         if (Input.GetKey(KeyCode.W)) direction.y = 1;
         if (Input.GetKey(KeyCode.A)) direction.x += 1;
@@ -174,14 +178,13 @@ public class PlayerShipController : ShipController
         base.ApplyForce(direction, Time.deltaTime);
         base.Run();
 
+        // cannon firing
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            print("Okay? We're trying");
             base.FireCannons(portSideCannons);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            print("Okay? We're trying");
             base.FireCannons(starboardSideCannons);
         }
 

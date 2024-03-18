@@ -580,6 +580,7 @@ MonoBehaviour:
   offAxis: {x: 0, y: 0}
   name: hms fun
   health: 100
+  maxHealth: 100
   floating: 1
   circle: {fileID: 5668318133759950164}
   boardingCircle: {fileID: 6994150998958888555}
@@ -596,7 +597,7 @@ MonoBehaviour:
   destinationForViewing: {x: 0, y: 0}
   targetPos: {x: 0, y: 0}
   cannonPrefab: {fileID: 2567104167891480189}
-  cannonCount: 6
+  cannonCount: 4
   fightReadiness: 0
   attacking: {fileID: 0}
   debugMarker: {fileID: 43950016945274033}

@@ -62,11 +62,20 @@ public class BoardingCircle : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("Collided with player! They entered the bounds! Aweome!");
         PlayerShipController player = collision.GetComponent<PlayerShipController>();
         if (player != null)
         {
             player.OnBoardingRadiusEntered(GetComponentInParent<ShipController>());
+            //player.boardingRadiusShip = gameObject.GetComponentInParent<ShipController>();
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        PlayerShipController player = collision.GetComponent<PlayerShipController>();
+        if (player != null && player.boardingRadiusShip == GetComponentInParent<ShipController>())
+        {
+            player.boardingRadiusShip = null;
+            player.hintText.text = "";
             //player.boardingRadiusShip = gameObject.GetComponentInParent<ShipController>();
         }
     }

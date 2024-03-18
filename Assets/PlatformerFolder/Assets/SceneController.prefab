@@ -109,6 +109,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 988a2698bd90f814b9d506be833dfe53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1: {fileID: 1459196073910328, guid: ce8ca57b7e9dfdb479b8c9541fa067af, type: 3}
-  enemy1: {fileID: 1459196073910328, guid: ce8ca57b7e9dfdb479b8c9541fa067af, type: 3}
-  enemy2: {fileID: 1459196073910328, guid: ce8ca57b7e9dfdb479b8c9541fa067af, type: 3}
+  enemy1: {fileID: 1459196073910328, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+  enemy2: {fileID: 1459196073910328, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}

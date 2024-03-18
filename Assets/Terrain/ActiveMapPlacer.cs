@@ -21,6 +21,7 @@ namespace Assets
         public ShipSideGenerator shipSideGenerator;
         public GameObject port;
         public GameObject shipPrefab;
+        public GameObject playerShip;
         public Transform shipsContainer;
         public Transform portContainer;
         public NameMap portNames;
@@ -40,6 +41,7 @@ namespace Assets
             // seed = 10;
             // numPorts = 20;
             PlacePorts();
+            playerShip.transform.position = terrainGenerator.CellToWorld(portContainer.GetComponentInChildren<Port>().dockCell);
         }
 
         public NameMap LoadPortNames(string filename)
