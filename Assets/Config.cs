@@ -19,6 +19,9 @@ namespace Assets
         public float featureSizeVariationFrequency = 7f;
         public float biomeSize = 32f;
 
+        [Header("Difficulty")]
+        static public int difficulty = 0;
+
         public void Start()
         {
             if (seed == -1) seed = UnityEngine.Random.Range(0f, 1000f);

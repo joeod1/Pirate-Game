@@ -20,12 +20,18 @@ namespace Assets.Logic
 
         public static long Seed(string seed, bool set = true)
         {
+            long tmp = String2Seed(seed);
+            if (set) SeededRandom.seed = tmp;
+            return tmp;
+        }
+
+        public static long String2Seed(string seed)
+        {
             long tmp = 0;
             for (int i = 0; i < seed.Length; i++)
             {
                 tmp += (int)seed.ElementAt<char>(i);
             }
-            if (set) SeededRandom.seed = tmp;
             return tmp;
         }
 

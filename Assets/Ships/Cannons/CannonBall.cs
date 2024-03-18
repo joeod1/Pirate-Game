@@ -35,7 +35,7 @@ namespace Assets
             if (controller != null)
                 if (controller != parent)
                 {
-                    controller.DamageShip(damage);
+                    controller.DamageShip(damage, parent);
                     // controller.health -= damage;
                     // float upDir = transform.up;
                     // rb2D.rotation

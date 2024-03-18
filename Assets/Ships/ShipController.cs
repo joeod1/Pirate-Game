@@ -23,9 +23,11 @@ public class ShipController : MonoBehaviour
     public Vector2 offAxis = new Vector2(0, 0);
 
     [Header("Status")]
-    public string name = "hms fun";
+    public string name = "fun";
     public TradeResources cargo = new TradeResources();
     public float health = 100;
+    public float maxHealth = 100;
+    public float floating = 1;
     public GameObject circle;
     public BoardingCircle boardingCircle;
     public bool sank = false;
@@ -77,10 +79,22 @@ public class ShipController : MonoBehaviour
 
     protected void Sink()
     {
-        shipModel.transform.position += new Vector3(0, 0, 0.01f);
+        floating += 0.01f;
+        transform.position = new Vector3(transform.position.x, transform.position.y, floating);//new Vector3(0, 0, floating / 100);
+        if (floating > 2)
+        {
+            Destroy(gameObject);
+            Destroy(this);
+        }
     }
 
-    public virtual void DamageShip(float dmg) { }
+    public float CalculateFirePeriod()
+    {
+        // this should be based on the crew health, but that may be project 2
+        return (1f - health / maxHealth) * 5f;
+    } 
+
+    public virtual void DamageShip(float dmg, ShipController attacker) { }
 
     public IEnumerator ExpandBoarding()
     {
