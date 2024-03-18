@@ -673,7 +673,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   speed: 5
   jump_speed: 63.2
   drag: 0.1
