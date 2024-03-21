@@ -175,15 +175,15 @@ public class Character : MonoBehaviour
             } else
             {
                 // climb up ladder //
-                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+                if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
                 {
-                    body.AddForce(new Vector2(0, 3));
+                    body.AddForce(new Vector2(0, 300f * Time.deltaTime));
                 }
 
                 // climb down ladder //
-                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+                if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
                 {
-                    body.AddForce(new Vector2(0, -3));
+                    body.AddForce(new Vector2(0, -800f * Time.deltaTime));
                 }
             }
 

@@ -139,7 +139,7 @@ public class PlayerShipController : ShipController
         // allow ship boarding
 
         // {
-        if (boardingRadiusShip != null && Input.GetKeyDown(KeyCode.Space))
+        if (boardingRadiusShip != null && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)))
         {
             // hintText.text = "PRESS SPACE TO BOARD " + boardingRadiusShip.name;
             sideGenerator.playerShipCargo = cargo;

@@ -18,13 +18,13 @@ namespace Assets
     {
         public Dictionary<ResourceType, int> quantities = new Dictionary<ResourceType, int>
         {
-            { ResourceType.Wood, 50 },
-            { ResourceType.Food, 50 },
-            { ResourceType.Oranges, 50 },
-            { ResourceType.Gold, 50 },
-            { ResourceType.Water, 100 },
+            { ResourceType.Wood, 0 },
+            { ResourceType.Food, 0 },
+            { ResourceType.Oranges, 0 },
+            { ResourceType.Gold, 0 },
+            { ResourceType.Water, 10 },
             { ResourceType.Drink, 5 },
-            { ResourceType.CannonBalls, 100 },
+            { ResourceType.CannonBalls, 75 },
         };
 
         public Dictionary<CannonBallType, int> cannonballs =

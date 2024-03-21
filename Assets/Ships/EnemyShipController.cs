@@ -83,7 +83,10 @@ public class EnemyShipController : ShipController
         float armormentReadiness = 1;
         int cannonballsNeeded = (int)(attacking.health / 2); // cannonballs needed determined by number of cannonballs to deplete attacking's health
         if (cannonballsNeeded > 0)
+        {
             armormentReadiness = cargo.quantities[ResourceType.CannonBalls] / cannonballsNeeded; // if >1, we have more than enough cannonballs to take it out
+            if (armormentReadiness < 1) return false;
+        }
         
         float healthAdvantage = 1;
         if (attacking.health > 0)
@@ -91,7 +94,7 @@ public class EnemyShipController : ShipController
         
         // float fireRateAdvantage = attacking.CalculateFirePeriod() / CalculateFirePeriod(); // determine whether we can shoot faster. commented out because it's the same as healthAdvantage right now
         
-        float solution = armormentReadiness * healthAdvantage; // * fireRateAdvantage; // simplest way to put all these factors  together. may need to add/adjust coefficients and constants
+        float solution = healthAdvantage; // * fireRateAdvantage; // simplest way to put all these factors  together. may need to add/adjust coefficients and constants
         if (solution > 0.5f) return true;
         return false;
     }

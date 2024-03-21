@@ -75,7 +75,7 @@ public class BoardingCircle : MonoBehaviour
         if (player != null && player.boardingRadiusShip == GetComponentInParent<ShipController>())
         {
             player.boardingRadiusShip = null;
-            player.hintText.text = "";
+            // player.hintText.text = "";
             //player.boardingRadiusShip = gameObject.GetComponentInParent<ShipController>();
         }
     }

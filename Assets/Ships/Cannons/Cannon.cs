@@ -17,7 +17,10 @@ namespace Assets
         public CannonBallType loadedType;
         public GameObject CannonBallPrefab;
         public GameObject projectileContainer;
+        public GameObject fireSound;
         private IEnumerator cor;
+
+        public AudioClip cannonSound;
 
         public void BeginLoad(int loadTime = 1)
         {
@@ -34,6 +37,7 @@ namespace Assets
             {
                 yield return new WaitForSeconds(time);
                 primed = true;
+                GetComponentInParent<ShipController>().cargo.quantities[ResourceType.CannonBalls] -= 1; 
             }
             loadSem++;
         }
@@ -46,6 +50,8 @@ namespace Assets
                 return;
             }
             print("Firing cannon!");
+            GetComponent<AudioSource>().PlayOneShot(cannonSound);
+
             GameObject projectile = Instantiate(CannonBallPrefab);
             Physics2D.IgnoreCollision(projectile.GetComponent<Collider2D>(), GetComponentInParent<Collider2D>());
             projectile.SetActive(true);
