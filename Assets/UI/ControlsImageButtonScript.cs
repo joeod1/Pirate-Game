@@ -6,14 +6,14 @@ using UnityEngine.UI;
 public class ControlsImageButtonScript : MonoBehaviour
 {
     //basic button for viewing the controls
-      private Button backButton;
+      private Button controlsButton;
      public  ControlsViewScript controlsView;
      public  ControlsScript controlsScreen;
 
     // Start is called before the first frame update
     public void Start(){
-        backButton = GetComponent<Button>();
-        backButton.onClick.AddListener(TaskOnClick);
+        controlsButton = GetComponent<Button>();
+        controlsButton.onClick.AddListener(TaskOnClick);
     }
     void TaskOnClick(){
         controlsView.gameObject.SetActive(true);
