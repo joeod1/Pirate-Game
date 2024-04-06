@@ -1,4 +1,5 @@
 using Assets;
+using Assets.Logic;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using UnityEngine.Tilemaps;
 
 public class ShipSideGenerator : MonoBehaviour
 {
+    public GameObject enemy;
     public Transform shipPartContainer;
     public ShipController ship;
     public ShipController playerShip;
@@ -162,6 +164,19 @@ public class ShipSideGenerator : MonoBehaviour
         }        
     }
 
+    public void PlaceEnemies() {
+
+        int crewMates = 3;
+        
+        for (int i = 0; i < crewMates; i++)
+        {
+            GameObject newEnemy = Instantiate(enemy, shipPartContainer);
+            newEnemy.SetActive(true);
+            newEnemy.transform.localPosition = new Vector3((SeededRandom.RangeInt(0, bounds.x * 2)) * 2, (SeededRandom.RangeInt(-1, bounds.y - 1)) * 3);
+        }
+    
+    }
+
     public void GenerateShip(ShipController ship)
     {
         this.ship = ship;
@@ -172,6 +187,7 @@ public class ShipSideGenerator : MonoBehaviour
         }
         shipSeed *= 2;
         PlacePlatforms();
+        PlaceEnemies();
     }
 
     // generate the ship with a coroutine

@@ -211,7 +211,7 @@ Transform:
   m_GameObject: {fileID: 1219991468088246}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.0061958046, w: 0.9999808}
-  m_LocalPosition: {x: -0.16728185, y: -0.301096, z: -0.5}
+  m_LocalPosition: {x: -0.262, y: -0.333, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -539,6 +539,7 @@ GameObject:
   - component: {fileID: 9105344306468306338}
   - component: {fileID: -4755573222361040728}
   - component: {fileID: -1310823837624483368}
+  - component: {fileID: 3754713274075704548}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -671,15 +672,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8282ef86c9c7841a84d31ee08dd2dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
   layerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   speed: 5
   jump_speed: 63.2
   drag: 0.1
+  firing_speed: 10
   firePoint: {fileID: 7983139578076917572}
-  cannonBalls:
-  - {fileID: 0}
+  cannonBall: {fileID: 5119321494450537163, guid: d93745734a12f384693e13afbea27c54, type: 3}
   hatSR: {fileID: 5845949251246921197}
   head: {fileID: 718421456801738291}
   browR: {fileID: 3089211578529716427}
@@ -694,10 +696,33 @@ MonoBehaviour:
   footL: {fileID: 7425252599114945154}
   captainHat: {fileID: 5452114948327671253}
   hatGO: {fileID: 535650560835501660}
+  sword: {fileID: 0}
+  gun: {fileID: 0}
+  controller: {fileID: 0}
   isPlayer: 1
   isFish: 0
   isUndead: 0
   isCaptain: 1
+  isGrounded: 0
+  walking: 0
+  cooldown: 50
+  onLadder: 0
+  direction: 0
+  displayInfo: {fileID: 0}
+  topdownMode: {fileID: 0}
+  platformerMode: {fileID: 0}
+--- !u!114 &3754713274075704548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1459196073910328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7fa704c21d4be741989fc423ec59121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1500955129865092
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,7 +1005,7 @@ Transform:
   m_GameObject: {fileID: 1667626433614496}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.22, y: -0.435, z: 0.5}
+  m_LocalPosition: {x: -0.195, y: -0.435, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1319,7 +1344,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 21300142, guid: 5cf1b4629c7cb104e98d369448084abd, type: 3}
+  m_Sprite: {fileID: 21300048, guid: 7c10afd229bd23042aaaa727d007ea1c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1524,7 +1549,7 @@ Transform:
   m_GameObject: {fileID: 1334917260400476977}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.51900005, y: -0.17000002, z: -0.5}
+  m_LocalPosition: {x: -0.541, y: -0.242, z: -0.5}
   m_LocalScale: {x: -0.1, y: 0.15, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2210,7 +2235,7 @@ Transform:
   m_GameObject: {fileID: 6002435602742795688}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.148, y: -0.036, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2364,7 +2389,7 @@ GameObject:
   m_Layer: 0
   m_Name: FirePoint
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2377,7 +2402,7 @@ Transform:
   m_GameObject: {fileID: 7020138736215160653}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.765, y: -0.08899999, z: -0.5}
+  m_LocalPosition: {x: -0.722, y: -0.147, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
