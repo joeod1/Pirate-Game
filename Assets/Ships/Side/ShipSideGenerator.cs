@@ -17,6 +17,7 @@ using UnityEngine.Tilemaps;
 
 public class ShipSideGenerator : MonoBehaviour
 {
+    public GameObject enemy;
     public Transform shipPartContainer;
     public Ship ship;
     public Ship playerShip;
@@ -170,21 +171,18 @@ public class ShipSideGenerator : MonoBehaviour
             }
         }        
     }
-    
-    public void PlaceEnemies()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            GameObject enemy = Instantiate(enemyPrefab, shipPartContainer);
-            enemy.SetActive(true);
-            enemy.transform.localPosition = new Vector3(
-                UnityEngine.Random.Range(0, bounds.x * 2) * 2,
-                UnityEngine.Random.Range(0, bounds.y - 1) * 3
 
-                //(SeededRandom.RangeFloat(new float2(-i * 10, i * 10),  0, bounds.x * 2)) * 2, 
-                //(SeededRandom.RangeFloat(new float2(i * 10, -i * 10), -1, bounds.y - 1)) * 3
-                );
+    public void PlaceEnemies() {
+
+        int crewMates = 3;
+        
+        for (int i = 0; i < crewMates; i++)
+        {
+            GameObject newEnemy = Instantiate(enemy, shipPartContainer);
+            newEnemy.SetActive(true);
+            newEnemy.transform.localPosition = new Vector3((SeededRandom.RangeInt(0, bounds.x * 2)) * 2, (SeededRandom.RangeInt(-1, bounds.y - 1)) * 3);
         }
+    
     }
 
     public void GenerateShip(Ship ship)

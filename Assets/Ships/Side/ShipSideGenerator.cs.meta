@@ -3,7 +3,19 @@ guid: 27746e00dcb99df4c8ceb294abd82b33
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - enemy: {fileID: 1459196073910328, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+  - shipPartContainer: {instanceID: 0}
+  - ship: {instanceID: 0}
+  - playerShip: {instanceID: 0}
+  - background: {instanceID: 0}
+  - woodTile: {instanceID: 0}
+  - platform: {instanceID: 0}
+  - ladder: {instanceID: 0}
+  - wall: {instanceID: 0}
+  - beam: {instanceID: 0}
+  - lamp: {instanceID: 0}
+  - playerCharacter: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
