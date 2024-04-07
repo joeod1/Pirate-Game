@@ -53,6 +53,7 @@ MonoBehaviour:
   CannonBallPrefab: {fileID: 3208467253514160480}
   projectileContainer: {fileID: 7586062183046534125}
   fireSound: {fileID: 7586062183046534125}
+  parent: {fileID: 0}
   cannonSound: {fileID: 8300000, guid: a8eb25fb4d58ef54197e80d07271b014, type: 3}
 --- !u!82 &1769789811377173290
 AudioSource:
@@ -66,7 +67,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a8eb25fb4d58ef54197e80d07271b014, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.026190449
+  m_Volume: 0.03949331
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -1,4 +1,7 @@
 using Assets;
+using Assets.Logic;
+using Assets.Ships;
+using Cainos.PixelArtPlatformer_VillageProps;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +12,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// ideally this should be divided up further: PlatformerManager holds ShipPlatformGenerator:PlatformGenerator and PortPlatformGenerator:PlatformGenerator
+// maybe during tuning stage? would do it sooner, but vcs
+
 public class ShipSideGenerator : MonoBehaviour
 {
     public Transform shipPartContainer;
-    public ShipController ship;
-    public ShipController playerShip;
+    public Ship ship;
+    public Ship playerShip;
     public Tilemap background;
     public Tile woodTile;
     public GameObject platform;
@@ -26,6 +32,8 @@ public class ShipSideGenerator : MonoBehaviour
     public Vector2Int bounds = new Vector2Int(10, 3);
     public GameObject[] containers;
     public int shipSeed = -1;
+
+    public GameObject enemyPrefab;
 
 
     // Start is called before the first frame update
@@ -60,7 +68,8 @@ public class ShipSideGenerator : MonoBehaviour
 
         // place cargo around the ship
         TradeResources leftToPlace = new TradeResources();
-        leftToPlace.quantities = ship.cargo.quantities.ToDictionary(entry => entry.Key, entry => entry.Value);
+        leftToPlace.quantities = ship.cargo.quantities.ToDictionary();//entry => entry.Key, entry => entry.Value);
+        print("serialized right here: " + JsonUtility.ToJson(leftToPlace));
         int totalLeft = leftToPlace.GetWeight();
         while (totalLeft > 0)
         {
@@ -161,8 +170,24 @@ public class ShipSideGenerator : MonoBehaviour
             }
         }        
     }
+    
+    public void PlaceEnemies()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject enemy = Instantiate(enemyPrefab, shipPartContainer);
+            enemy.SetActive(true);
+            enemy.transform.localPosition = new Vector3(
+                UnityEngine.Random.Range(0, bounds.x * 2) * 2,
+                UnityEngine.Random.Range(0, bounds.y - 1) * 3
 
-    public void GenerateShip(ShipController ship)
+                //(SeededRandom.RangeFloat(new float2(-i * 10, i * 10),  0, bounds.x * 2)) * 2, 
+                //(SeededRandom.RangeFloat(new float2(i * 10, -i * 10), -1, bounds.y - 1)) * 3
+                );
+        }
+    }
+
+    public void GenerateShip(Ship ship)
     {
         this.ship = ship;
         // create a seed from the ship's name
@@ -172,10 +197,11 @@ public class ShipSideGenerator : MonoBehaviour
         }
         shipSeed *= 2;
         PlacePlatforms();
+        PlaceEnemies();
     }
 
     // generate the ship with a coroutine
-    public IEnumerator coGenerateShip(ShipController ship)
+    public IEnumerator coGenerateShip(Ship ship)
     {
         gameObject.SetActive(true);
         for (int i = 0; i < transform.childCount; i++)

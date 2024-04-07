@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Ships;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ using UnityEngine;
 
 namespace Assets
 {
+    public delegate void ProjectileHit(float damage, Collider2D other);
+
     public enum CannonBallType : ushort
     {
         Standard,
@@ -21,8 +24,9 @@ namespace Assets
     public class CannonBall : MonoBehaviour
     {
         public float damage = 10;
-        public ShipController parent;
+        public GameObject parent;
         private Rigidbody2D rb2D;
+        public ProjectileHit OnCollision;
 
         private void Start()
         {
@@ -31,7 +35,14 @@ namespace Assets
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            ShipController controller = collision.GetComponentInParent<ShipController>();
+            IDamageable obj = collision.GetComponent<IDamageable>();
+            if (obj != null)
+            {
+                obj.Damage(damage, parent);
+            }
+
+            /*ShipController controller = collision.GetComponentInParent<ShipController>();*/
+            /*
             if (controller != null)
                 if (controller != parent)
                 {
@@ -49,7 +60,12 @@ namespace Assets
                 else return;
 
             Port port = collision.GetComponent<Port>();
-            if (port != null) return;
+            if (port != null) return;*/
+
+            /*if (OnCollision != null)
+            {
+                OnCollision(damage, collision);
+            }*/
             
             Destroy(this.gameObject);
         }

@@ -8,5 +8,6 @@ namespace Assets.Ships
 {
     public class Crewmate : Person
     {
+
     }
 }

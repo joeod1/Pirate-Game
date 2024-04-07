@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[Serializable]
 public class PlayerShipController : ShipController
 {
     [Header("Physics & Camera")]
@@ -41,18 +42,18 @@ public class PlayerShipController : ShipController
     {
         base.Init();
         cargo.quantities[Assets.ResourceType.CannonBalls] = 100;
-        if (terrainGenerator.config != null)
+        if (GameManager.Config != null)
         {
             renderBounds = new Vector2Int(100, 100);
             terrainGenerator.RenderBlock(new Vector2(0, 0), new Vector2Int(100, 100));
         }
         UpdateHUD();
-        // terrainGenerator.AStar(point1.position, point2.position);
+        terrainGenerator.AStar(point1.position, point2.position);
     }
 
-    public void OnBoardingRadiusEntered(ShipController ship)
+    public void OnBoardingRadiusEntered(Ship ship)
     {
-        boardingRadiusShip = ship;
+        // boardingRadiusShip = ship;
         // StartCoroutine(sideGenerator.coGenerateShip(boardingRadiusShip));
 
     }
@@ -65,7 +66,7 @@ public class PlayerShipController : ShipController
 
     public override void DamageShip(float damage, ShipController attacker)
     {
-        switch(Config.difficulty)
+        switch(GameManager.Config.difficulty)
         {
             case 0:
                 damage /= 2;
@@ -143,8 +144,8 @@ public class PlayerShipController : ShipController
         {
             // hintText.text = "PRESS SPACE TO BOARD " + boardingRadiusShip.name;
             sideGenerator.playerShipCargo = cargo;
-            sideGenerator.playerShip = this;
-            sideGenerator.GenerateShip(boardingRadiusShip);
+            //sideGenerator.playerShip = this;
+            //sideGenerator.GenerateShip(boardingRadiusShip);
             topdownGenerator.gameObject.SetActive(false);
             sideGenerator.gameObject.SetActive(true);
         }

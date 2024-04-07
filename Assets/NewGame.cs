@@ -32,14 +32,14 @@ public class NewGame : MonoBehaviour
 
     public void StartNewGame()
     {
-        config.seed = SeededRandom.String2Seed(seedInput.text);
-        config.numPorts = int.Parse(portsNumInput.text);
-        config.waterLevel = waterLevelInput.value;
-        config.bounds = new Vector2Int(
+        GameManager.Config.seed = SeededRandom.String2Seed(seedInput.text);
+        GameManager.Config.numPorts = int.Parse(portsNumInput.text);
+        GameManager.Config.waterLevel = waterLevelInput.value;
+        GameManager.Config.bounds = new Vector2Int(
             int.Parse(boundsXInput.text),
             int.Parse(boundsYInput.text)
             );
-        Config.difficulty = difficultyInput.value;
+        GameManager.Config.difficulty = difficultyInput.value;
 
         mainCamera.orthographicSize = 12;
         mapPlacer.enabled = true;

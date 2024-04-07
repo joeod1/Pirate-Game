@@ -11,4 +11,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/JoeSceneBackup.unity
     guid: a592c3ed7cfc02041930a17837c02416
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: e4bf817f25e0e5b4e8cfdf225a822f7c, type: 2}

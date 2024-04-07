@@ -671,9 +671,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8282ef86c9c7841a84d31ee08dd2dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 0}
   layerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   speed: 5
   jump_speed: 63.2
   drag: 0.1
@@ -698,6 +699,24 @@ MonoBehaviour:
   isFish: 0
   isUndead: 0
   isCaptain: 1
+  onLadder: 0
+  displayInfo: {fileID: 0}
+  playerCargo:
+    quantities:
+      keys: 0000010002000300040005000600
+      values: 000000000000000000000000000000000a000000050000004b000000
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 000000000000000000000000000000000000000000000000
+  containerPeek:
+    quantities:
+      keys: 0000010002000300040005000600
+      values: 000000000000000000000000000000000a000000050000004b000000
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 000000000000000000000000000000000000000000000000
+  topdownMode: {fileID: 0}
+  platformerMode: {fileID: 0}
 --- !u!1 &1500955129865092
 GameObject:
   m_ObjectHideFlags: 0

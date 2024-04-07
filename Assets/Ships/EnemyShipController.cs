@@ -9,8 +9,11 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
+
+[Serializable]
 public class EnemyShipController : ShipController
 {
+    public Path path;
     public PathNode target;
     public TerrainGeneration terrainGenerator;
     // public GameObject circle;
@@ -46,6 +49,8 @@ public class EnemyShipController : ShipController
         PlaceCannons();
 
         name = NameGenerator.GenerateName(new float2(transform.position.x, transform.position.y), nameMap);
+
+        print(JsonUtility.ToJson(this));
 
         if (thinkingForSelf)
         {
@@ -248,7 +253,6 @@ public class EnemyShipController : ShipController
                 target = null;
             }
         }
-
     }
 
     public override void DamageShip(float dmg, ShipController attacker)

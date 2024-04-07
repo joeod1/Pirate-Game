@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Ships
 {
+    [Serializable]
     public class Crew
     {
         public float health = 100, maxHealth = 100;

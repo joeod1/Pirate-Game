@@ -1,5 +1,7 @@
 ﻿using Assets.Logic;
+using Assets.Ships;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,9 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class Port : MonoBehaviour
+
+    [Serializable]
+    public class Port : MonoBehaviour, ISerializationCallbackReceiver
     {
         [Header("Map")]
         public TerrainGeneration terrainGenerator;
@@ -46,14 +50,14 @@ namespace Assets
 
         [Header("Ships")]
         public GameObject shipPrefab;
-        public List<EnemyShipController> ships;
+        public List<EnemyShipController1> ships;
         public Transform shipsContainer;
 
         public static NameMap nameMap;
 
         // what if wood is produced by chopping down wood cells?
         // create a dictionary and iterate through the cells rendered in terraingenerator
-
+        
         // possibly create a new class that identify production time remaining, etc
         // how do we cut down trees without the terrain generator working? should each Port be a gameobject? probably
         public Port(Vector3Int inputCell, bool friendly = false)
@@ -69,11 +73,13 @@ namespace Assets
             nameMap = NameGenerator.LoadFromFile("portnames.json");
         }
 
-        public void PathToPorts()
+        static int ct = 0;
+        public IEnumerator coPathToPorts(int portnum)
         {
             print(ports.Count);
             paths = new Dictionary<Port, Path>();
             print(paths);
+            List<Coroutine> co = new List<Coroutine>();
             foreach (Port port in ports)
             {
                 if (port == this) continue;
@@ -81,10 +87,25 @@ namespace Assets
                 if (port.dockCell == null) print("No dockCell on other port?");
                 if (port != null)
                 {
-                    paths.Add(port, terrainGenerator.AStar(port.dockCell, dockCell, count: 25000));
-                    if (paths[port] == null || paths[port].currentNode == null) paths.Remove(port);
+                    Port.ct++;
+                    co.Add(StartCoroutine(terrainGenerator.coAStar(port.dockCell, dockCell, (Path p) =>
+                    {
+                        if (p != null)
+                        {
+                            p.UpdateArray();
+                            paths.Add(port, p);
+                            GameManager.Instance.loadingBar.UpdateSubBar(Port.ct, ports.Count * ports.Count);
+                        }
+                    }, count: 2500, port: portnum)));
+                    //paths.Add(port, terrainGenerator.AStar(port.dockCell, dockCell, count: 500));
+                    //if (paths[port] == null || paths[port].currentNode == null) paths.Remove(port);
+                    yield return null;
+                    // yield return co[co.Count - 1];
                 }
-
+            }
+            foreach (Coroutine cor in co)
+            {
+                yield return cor;
             }
             try
             {
@@ -101,13 +122,23 @@ namespace Assets
             if (paths.ContainsKey(destination) && paths[destination].currentNode != null && paths[destination].currentNode.prior != null)
             {
                 GameObject ship = Instantiate(shipPrefab, shipsContainer);
-                EnemyShipController controller = ship.GetComponent<EnemyShipController>();
-                controller.terrainGenerator = terrainGenerator;
+                EnemyShipController1 controller = ship.GetComponent<EnemyShipController1>();
+                if (controller == null)
+                {
+                    print("why is controller null??");
+                }
+                // controller.terrainGenerator = terrainGenerator;
 
-                controller.homePort = this;
-                controller.fromPort = destination;
-                ship.transform.position = paths[destination].currentNode.position;//terrainGenerator.CellToWorld(paths[destination].currentNode.cell);
-                controller.target = paths[destination].currentNode;
+                if (controller.ship == null)
+                {
+                    print("controller's ship is null? strange...");
+                }
+                controller.ship.homePort = name;
+                controller.ship.destinationPort = destination.name;
+                ship.transform.position = SystemsManager.Instance.terrainGenerator.CellToWorld(dockCell); // paths[destination].currentNode.position;//terrainGenerator.CellToWorld(paths[destination].currentNode.cell);
+                controller.StartPath(paths[destination]);
+                //controller.path = paths[destination];//.startNode
+                //controller.currentPathNode = 0;
             }
         }
 
@@ -117,90 +148,29 @@ namespace Assets
         public void GeneratePortInfo()
         {
             name = NameGenerator.GenerateName(new float2(transform.position.x, transform.position.y), nameMap);
-            //GenerateName();
         }
-        /*static string[] prefixes = { 
-            "Port", "Fort", "Camp"
-        };
-        static string[] suffixes = {
-            "Cove", "Respite", "Bay", "Castle", "City", "Coast", "Hideout", "Capital", "Seaport", "Harbor", "Haven", "Marina"
-        };
-        static string[] names = {
-            "Sandy", "Sponge", "Starfish", "Stink", "Chip", "Deadman", "Junior", "Drowning", "Balloon", 
-            "Computer", "Microprocessor", "Pyramid Scheme", "Echo", "Tacky", "Bludgeon", "Request Timeout",
-            "Bond", "Michael", "Skeleton", "Winter", "Liberty", "E", "Chocolate", "Nite", "Knight", "Blueberry",
-            "Banana", "Hamburger", "Automobile", "Microwave Oven", "Chicken", "Yugoslavia", "Slovenia", "Serbia",
-            "North Macedonia", "Greece", "Juice", "Blooper", "Sludge", "Muck", "Name", "Legend", "User Interface",
-            "Minced", "Grater", "Cheese", "Bling", "Argument", "Photograph", "Trades-a-lot", "Video Gamer",
-            "Jim", "Watery", "Hotdog", "Filler", "Casino", "Slots Machine", "Roulette Wheel", "Imagination",
-            "Happiness", "Jump", "Blind", "Ex-Wife", "Landlock", "Dishonesty", "Smidgen", "Copyright Law",
-            "Strawberry", "Fisherman", "Useless", "Irate", "Danger", "Pepper", "Slime", "Styrofoam", "Jeepers Creepers",
-            "I can't come up with a name", "Wrestling Champ", "Critical Acclaim", "Judicial", "Low Battery",
-            "Unplayable", "Ten Frames", "Procedural", "Jubwub", "Down by the", "Hairier", "er, Harry", "Parrot",
-            "Requirements", "Scrum", "Agile", "Craft", "Blub", "Soda", "Caffeine", "Ceramic", "Whammy", "Rock",
-            "Boulder", "Market", "Cohort", "Short", "Turkey Dinner", "Mac'n'Cheese", "Discovery", "Poison",
-            "Hotwire", "Intermission", "Marco", "Polo", "Lost", "Apprehensive", "Silly Billy", "Retail Store",
-            "Station Wagon", "Zumzazoo", "Thingamabob", "Whozeewhatsit", "Whirligig", "Nick-Nack", "Witch",
-            "Whatchamacallit", "Plasma Television", "Air Circulation", "Leftovers", ""
-        };*/
-        public void GenerateName()
+
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            float noiseValue = SeededRandom.RangeFloat(new float2(transform.position.x, transform.position.y), 0, 1);//math.abs(noise.snoise(new float2(i * 100, seed * 1000)));
-            // print(noiseValue);
-            nameAssembly = new int3();
-
-            // Select the default name
-            nameAssembly[2] = (int)(noiseValue * 2); // whether prefix (1) or suffix (0)
-            if (nameAssembly[2] == 1)
+            IBoards player = collision.GetComponent<IBoards>();
+            if (player != null)
             {
-                nameAssembly[0] = (int)(noiseValue * portNames.prefixes.Count); // prefix;
-            } else
-            {
-                nameAssembly[0] = (int)(noiseValue * portNames.suffixes.Count); // suffix
+                player.EnteredRadius(gameObject);
             }
-            nameAssembly[1] = (int)(noiseValue * portNames.names.Count); // name
-
-            // Iterate main part until name is unique OR we loop back to where we started
-            int og = nameAssembly[1];
-            while (namesGenerated.ContainsKey(nameAssembly) && (nameAssembly[1] + 1 != og)) nameAssembly[1] = (nameAssembly[1] + 1) % portNames.names.Count;
-
-            // Iterate -fix until the name is unique OR we loop back to where we started
-            og = nameAssembly[0];
-            int limit = (nameAssembly[2] == 1) ? portNames.prefixes.Count : portNames.suffixes.Count;
-            while (namesGenerated.ContainsKey(nameAssembly) && (nameAssembly[0] + 1 != og)) nameAssembly[0] = (nameAssembly[0] + 1) % limit;
-
-            // Sad
-            if (namesGenerated.ContainsKey(nameAssembly))
+            /*PlayerShipController1 controller = collision.GetComponent<PlayerShipController1>();
+            if (controller != null)
             {
-                // print("Failed to make a unique name for " + i);
-            }
-            namesGenerated[nameAssembly] = true;
-
-            // Convert name to string
-            if (nameAssembly[2] == 1)
-            {
-                name = portNames.prefixes[nameAssembly[0]] + " " + portNames.names[nameAssembly[1]];
-            } else
-            {
-                name = portNames.names[nameAssembly[1]] + " " + portNames.suffixes[nameAssembly[0]];
-            }
-            gameObject.name = name;
-
+                controller.BoardPort = Board;
+                SystemsManager.SetHint("at " + name + "\nPress space to enter");
+            }*/
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        public void Board(Ship ship)
         {
-            if (collision.gameObject.name == "PlayerShip")
-            {
-                uiText.text = "at " + name;
-                // DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
-            }
-            //else
-            //{
-            //}
+            print("Ship would be boarded");
         }
 
-        int countdownToAnother = 50;
+        /*int countdownToAnother = 50;
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (collision.gameObject.name == "PlayerShip") { }
@@ -214,20 +184,42 @@ namespace Assets
                     // if (controller.target.cell == dockCell && countdownToAnother == 0) DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Keys.Count)]);
                     do
                     {
-                        controller.target = paths.Values.ToArray()[
-                            (int)UnityEngine.Random.Range(0, paths.Values.Count)
+                        if (paths == null) return;
+                        List<Path> list = paths.Values.ToList();
+                        if (list.Count <= 0) return;
+                        controller.target = list[
+                            (int)UnityEngine.Random.Range(0, list.Count - 1)
                         ].currentNode;
                         controller.targetPos = terrainGenerator.CellToWorld(controller.target.cell);
                     }
                     while (controller.target == null || controller.target.prior == null);
                 }
             }
-        }
+        }*/
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.gameObject.name == "PlayerShip")
-                uiText.text = "";
+            IBoards player = collision.GetComponent<IBoards>();
+            if (player != null)
+            {
+                player.LeftRadius(gameObject);
+            }
+            /*PlayerShipController1 controller = collision.GetComponent<PlayerShipController1>();
+            if (controller != null)
+            {
+                controller.BoardPort = null;
+                SystemsManager.UnsetHint("at " + name + "\nPress space to enter");
+            }*/
+        }
+
+        public void OnBeforeSerialize()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void OnAfterDeserialize()
+        {
+            //throw new NotImplementedException();
         }
     }
 }

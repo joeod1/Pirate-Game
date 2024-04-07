@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -129,15 +130,14 @@ public class Character : MonoBehaviour
         {
             // loot containers //
             // doesn't work right now
-            /*if (containerPeek != null && Input.GetKeyDown(KeyCode.F)) {
-                for (int i = 0; i < containerPeek.quantities.Keys.Count; i++)
-                {
-                    playerCargo.quantities[i] += containerPeek.quantities[i];
-                    containerPeek.quantities[i] = 0;
-                    LeftContents(containerPeek);
+            if (containerPeek != null && Input.GetKeyDown(KeyCode.F)) {
+                foreach (KeyValuePair<ResourceType, int> pair in containerPeek.quantities.ToList()) {
+                    playerCargo.quantities[pair.Key] += pair.Value;//containerPeek.quantities.Values[i];
+                    containerPeek.quantities[pair.Key] = 0;
                 }
-                containerPeek.quantities.Clear();
-            }*/
+                LeftContents(containerPeek);
+                // Destroy(containerPeek);
+            }
 
             if (transform.localPosition.y > 6)
             {

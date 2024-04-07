@@ -18,9 +18,14 @@ namespace Assets
         public GameObject CannonBallPrefab;
         public GameObject projectileContainer;
         public GameObject fireSound;
+        public GameObject parent;
         private IEnumerator cor;
 
+        public ProjectileHit LandedCallback;
+
         public AudioClip cannonSound;
+
+        public ForResourceQuantity ConsumeResource;
 
         public void BeginLoad(int loadTime = 1)
         {
@@ -33,11 +38,16 @@ namespace Assets
         {
             int mine = 0;
             int possession = Interlocked.Exchange(ref loadSem, mine);
+            
             while (!primed && possession > 0)
             {
+                if (ConsumeResource != null)
+                {
+                    ConsumeResource(ResourceType.CannonBalls, 1);
+                }
+
                 yield return new WaitForSeconds(time);
                 primed = true;
-                GetComponentInParent<ShipController>().cargo.quantities[ResourceType.CannonBalls] -= 1; 
             }
             loadSem++;
         }
@@ -59,7 +69,8 @@ namespace Assets
             Rigidbody2D rb2D = projectile.GetComponent<Rigidbody2D>();
             rb2D.AddForce(this.transform.up * speed);
             CannonBall projectileController = projectile.GetComponent<CannonBall>();
-            projectileController.parent = this.GetComponentInParent<ShipController>();
+            projectileController.parent = parent;  // OnCollision = LandedCallback;
+            // projectileController.parent = this.GetComponentInParent<ShipController>();
             primed = false;
             BeginLoad();
         }

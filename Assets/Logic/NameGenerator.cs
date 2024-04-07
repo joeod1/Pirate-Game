@@ -19,7 +19,7 @@ public class NameGenerator : MonoBehaviour
     {
         float randomValue = SeededRandom.RangeFloat(pos, 0f, 1f);
         int3 nameAssembly = new int3(); // (-fix, name, suffix 0 or prefix 1)
-        print(randomValue);
+        // print(randomValue);
         // Select the default name
         nameAssembly[2] = (int)(randomValue * 2); // whether prefix (1) or suffix (0)
         if (nameAssembly[2] == 1)
@@ -29,15 +29,23 @@ public class NameGenerator : MonoBehaviour
         nameAssembly[1] = (int)(randomValue * map.names.Count); // name
 
         // Iterate main part until name is unique OR we loop back to where we started
+        int ct = 0;
         int og = nameAssembly[1];
-        while (map.existingNames.Contains(nameAssembly) && (nameAssembly[1] + 1 != og)) 
-            nameAssembly[1] = 
-                (nameAssembly[1] + 1) % map.names.Count;
+        while (map.existingNames.Contains(nameAssembly) && (nameAssembly[1] + 1 != og) && ct < map.names.Count)
+        {
+            nameAssembly[1] = (nameAssembly[1] + 1) % map.names.Count;
+            ct++;
+        }
 
         // Iterate -fix until the name is unique OR we loop back to where we started
+        ct = 0;
         og = nameAssembly[0];
         int limit = (nameAssembly[2] == 1) ? map.prefixes.Count : map.suffixes.Count;
-        while (map.existingNames.Contains(nameAssembly) && (nameAssembly[0] + 1 != og)) nameAssembly[0] = (nameAssembly[0] + 1) % limit;
+        while (map.existingNames.Contains(nameAssembly) && (nameAssembly[0] + 1 != og) && ct < limit)
+        {
+            nameAssembly[0] = (nameAssembly[0] + 1) % limit;
+            ct++;
+        }
         
         // Sad
         if (map.existingNames.Contains(nameAssembly))
@@ -54,10 +62,10 @@ public class NameGenerator : MonoBehaviour
         }
         else
         {
-            print(map.names.Count);
-            print(nameAssembly[1]);
-            print(map.suffixes.Count);
-            print(nameAssembly[0]);
+            // print(map.names.Count);
+            // print(nameAssembly[1]);
+            // print(map.suffixes.Count);
+            // print(nameAssembly[0]);
             name = map.names[nameAssembly[1]] + " " + map.suffixes[nameAssembly[0]];
         }
         return name;

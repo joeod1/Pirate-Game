@@ -7,37 +7,59 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[Serializable]
 public class ShipController : MonoBehaviour
 {
+
     [Header("Physics & Camera")]
     protected Rigidbody2D rb2D;
 
     [Header("Speed")]
+    [SerializeField]
     public float forwardSpeed;
+    [SerializeField]
     public float turningSpeed;
 
     [Header("3D Illusion")]
+    [SerializeField]
     public Transform shipModel;
+    [SerializeField]
     public float horizontalAngle;
+    [SerializeField]
     public float verticalAngle;
+    [SerializeField]
     public Vector2 offAxis = new Vector2(0, 0);
 
     [Header("Status")]
+    [SerializeField]
     public string name = "fun";
+    [SerializeField]
     public TradeResources cargo = new TradeResources();
+    [SerializeField]
     public float health = 100;
+    [SerializeField]
     public float maxHealth = 100;
+    [SerializeField]
     public float floating = 1;
+    [SerializeField]
     public GameObject circle;
+    [SerializeField]
     public BoardingCircle boardingCircle;
+    [SerializeField]
     public bool sank = false;
+    [SerializeField]
     public GameObject healthBar;
+    [SerializeField]
     public GameObject healthMeter;
 
     [Header("Combat")]
+    [SerializeField]
     public GameObject cannonPrefab;
+    [SerializeField]
     public int cannonCount = 6;
+    [SerializeField]
     public List<Cannon> portSideCannons = new List<Cannon>(); // left side
+    [SerializeField]
     public List<Cannon> starboardSideCannons = new List<Cannon>(); // right side
 
     public static NameMap nameMap;
@@ -49,7 +71,8 @@ public class ShipController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {;
+    {
+        ;
     }
 
     protected void Init()
