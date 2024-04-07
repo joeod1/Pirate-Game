@@ -3,7 +3,23 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - hat
+  - captainHat
+  - mouth
+  - head
+  - handR
+  - body
+  - footL
+  - browL
+  - eyeR
+  - handL
+  - browR
+  - eyeL
+  - footR
+  - sword
+  - gun
+  - cannonball
   layers:
   - Default
   - TransparentFX
@@ -14,7 +30,7 @@ TagManager:
   - 
   - Ships
   - Platforms
-  - 
+  - PlatformerCharacters
   - 
   - 
   - 

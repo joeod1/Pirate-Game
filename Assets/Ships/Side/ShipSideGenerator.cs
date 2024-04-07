@@ -1,9 +1,11 @@
 using Assets;
 using Assets.Logic;
+using Assets.PlatformerFolder;
 using Assets.Ships;
 using Cainos.PixelArtPlatformer_VillageProps;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.Burst.CompilerServices;
@@ -34,13 +36,17 @@ public class ShipSideGenerator : MonoBehaviour
     public GameObject[] containers;
     public int shipSeed = -1;
 
+
+    public LadderMap ladders;
+
     public GameObject enemyPrefab;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        playerShipCargo = playerShip.cargo;
+        if (playerShip != null) 
+            playerShipCargo = playerShip.cargo;
         GenerateShip(ship);
 
     }
@@ -59,6 +65,7 @@ public class ShipSideGenerator : MonoBehaviour
         // move the player to the appropriate location
         playerCharacter.transform.localPosition = new Vector3(bounds.x * 2, bounds.y * 3, 0);
 
+        background.ClearAllTiles();
         for (int x = 0; x < bounds.x * 4; x += 3)
         {
             for (int y = -1; y < (bounds.y - 1) * 3; y += 3)
@@ -117,6 +124,8 @@ public class ShipSideGenerator : MonoBehaviour
             }
         }
 
+        ladders = new LadderMap();
+
         for (int y = -1; y < bounds.y; y++)
         {
             // place a ladder for each floor
@@ -136,6 +145,7 @@ public class ShipSideGenerator : MonoBehaviour
                         newPlatform.GetComponent<Collider2D>().isTrigger = true;
                         GameObject newLadder = Instantiate(ladder, shipPartContainer);
                         newLadder.transform.localPosition = new Vector2(x * 4 + 2, y * 3 - 3);
+                        ladders.Set(newLadder.transform.position);
                     }
                 }
                 if (y < 0) continue;
@@ -179,8 +189,13 @@ public class ShipSideGenerator : MonoBehaviour
         for (int i = 0; i < crewMates; i++)
         {
             GameObject newEnemy = Instantiate(enemy, shipPartContainer);
+            newEnemy.transform.localPosition = new Vector3(
+                UnityEngine.Random.Range(0, bounds.x * 4),
+                UnityEngine.Random.Range(0, bounds.y * 3)
+                );
+            newEnemy.GetComponent<NonPlayerController>().ladders = ladders;
+            newEnemy.GetComponent<NonPlayerController>().target = playerCharacter;
             newEnemy.SetActive(true);
-            newEnemy.transform.localPosition = new Vector3((SeededRandom.RangeInt(0, bounds.x * 2)) * 2, (SeededRandom.RangeInt(-1, bounds.y - 1)) * 3);
         }
     
     }

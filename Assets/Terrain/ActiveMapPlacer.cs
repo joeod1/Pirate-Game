@@ -8,6 +8,7 @@ using UnityEngine;
 using Unity.Mathematics;
 using TMPro;
 using System.Threading;
+using Assets.Logic;
 
 namespace Assets
 {
@@ -50,18 +51,8 @@ namespace Assets
             // seed = 10;
             // numPorts = 20;
             StartCoroutine(coPlacePorts());
-            Port portWithDock = null;
-            foreach (Port port in Port.ports)
-            {
-                if (port.dockCell != null)
-                {
-                    portWithDock = port;
-                    break;
-                }
-            }
-            playerShip.transform.position = terrainGenerator.CellToWorld(portWithDock.dockCell);
 
-            StartCoroutine(coPrintAfterTime(10));
+            // StartCoroutine(coPrintAfterTime(10));
         }
 
         public NameMap LoadPortNames(string filename)
@@ -119,6 +110,7 @@ namespace Assets
             }
 
             Port.ports.Add(portData);
+            print("Added port to ports");
             Interlocked.Increment(ref portsMade);
             GameManager.Instance.loadingBar.UpdateBar("Generating ports: " + portsMade + "/" + portsTotal, portsMade, portsTotal);
         }
@@ -139,6 +131,7 @@ namespace Assets
             // print(bounds);
             for (int i = 0; i < GameManager.Config.numPorts; i++)
             {
+                //yield return coPlacePort(i);
                 co.Add(StartCoroutine(coPlacePort(i)));
                 
                 /*int count = 0;
@@ -188,26 +181,47 @@ namespace Assets
                 Port.ports.Add(portData);*/
             }
 
-            for (int i = 0; i < portsMade; i++)
+            for (int i = 0; i < co.Count; i++)
             {
                 yield return co[i];
             }
 
+            // while (Port.ports.Count < portsMade) { yield return null; }
+
             co.Clear();
+
+            print("The number of ports? oh yeah, that's " + Port.ports.Count);
 
             for (int i = 0; i < Port.ports.Count; i++)
             {
                 Port port = Port.ports[i];
                 // yield return port.coPathToPorts();
-                GameManager.Instance.loadingBar.UpdateBar("Pathing ports: " + i + "/" + Port.ports.Count, i, Port.ports.Count);
+                GameManager.Instance.loadingBar.UpdateBar("Pathing ports: " + (i + 1) + "/" + Port.ports.Count, i + 1, Port.ports.Count);
                 co.Add(StartCoroutine(port.coPathToPorts(i + 1)));
                 yield return co[co.Count - 1];
             }
             
-            for (int i = 0; i < portsMade; i++)
+            /*for (int i = 0; i < co.Count; i++)
             {
                 yield return co[i];
+            }*/
+
+            Port portWithDock = null;
+            foreach (Port port in Port.ports)
+            {
+                if (port.dockCell != null)
+                {
+                    portWithDock = port;
+                    break;
+                }
             }
+            if (portWithDock != null)
+            {
+                playerShip.transform.position = SystemsManager.Instance.terrainGenerator.CellToWorld(portWithDock.dockCell);
+                print("placed player");
+            }
+
+            SystemsManager.Instance.terrainGenerator.RenderZones();
 
             GameManager.Instance.loadingBar.gameObject.SetActive(false);
             yield return null;

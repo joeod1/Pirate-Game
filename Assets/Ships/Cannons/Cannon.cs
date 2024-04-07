@@ -20,6 +20,7 @@ namespace Assets
         public GameObject fireSound;
         public GameObject parent;
         private IEnumerator cor;
+        public bool selfManaging = true;
 
         public ProjectileHit LandedCallback;
 
@@ -29,6 +30,7 @@ namespace Assets
 
         public void BeginLoad(int loadTime = 1)
         {
+            if (!selfManaging) return;
             if (primed || loadSem == 0) return;
             cor = Load(loadTime);
             StartCoroutine(cor);
@@ -54,7 +56,7 @@ namespace Assets
 
         public void Fire()
         {
-            if (!primed)
+            if (!primed && selfManaging)
             {
                 BeginLoad();
                 return;
@@ -63,7 +65,11 @@ namespace Assets
             GetComponent<AudioSource>().PlayOneShot(cannonSound);
 
             GameObject projectile = Instantiate(CannonBallPrefab);
-            Physics2D.IgnoreCollision(projectile.GetComponent<Collider2D>(), GetComponentInParent<Collider2D>());
+
+            Collider2D parentCollider = GetComponentInParent<Collider2D>();
+            if (parentCollider != null)
+                Physics2D.IgnoreCollision(projectile.GetComponent<Collider2D>(), GetComponentInParent<Collider2D>());   
+
             projectile.SetActive(true);
             projectile.transform.position = this.transform.position;
             Rigidbody2D rb2D = projectile.GetComponent<Rigidbody2D>();

@@ -12783,6 +12783,13 @@ MonoBehaviour:
   beam: {fileID: 982056747370159609, guid: b1416ff36052b784c902207567aa8322, type: 3}
   lamp: {fileID: 3226521009676847256, guid: 4f883e869cf815243824178eb56771ab, type: 3}
   playerCharacter: {fileID: 797398878}
+  playerShipCargo:
+    quantities:
+      keys: 0000010002000300040005000600
+      values: 000000000000000000000000000000000a000000050000004b000000
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 000000000000000000000000000000000000000000000000
   bounds: {x: 10, y: 3}
   containers:
   - {fileID: 2018365450437254144, guid: 4a059ebbcd537f74fa2c8088e8f0288a, type: 3}
@@ -12790,6 +12797,7 @@ MonoBehaviour:
   - {fileID: 8835732614094124545, guid: 8ebcf7eb06a150f4594e4682167bcb66, type: 3}
   - {fileID: 4005825815561991157, guid: d31df0bce6dab7347b9f9901f7806ef8, type: 3}
   shipSeed: -1
+  enemyPrefab: {fileID: 0}
 --- !u!1 &715336699
 GameObject:
   m_ObjectHideFlags: 0
@@ -21759,6 +21767,7 @@ MonoBehaviour:
   featureSizeVariation: 0.1
   featureSizeVariationFrequency: 8
   biomeSize: 32
+  difficulty: 0
 --- !u!1 &1415858046
 GameObject:
   m_ObjectHideFlags: 0
@@ -26849,7 +26858,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1f70b0dc831a3409e9a39508448246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 1406707090}
   collidable: {fileID: 299633218}
   uncollidable: {fileID: 794420481}
   ground: {fileID: 11400000, guid: aee732d35069dd24faf060c200577a17, type: 2}
@@ -27018,7 +27026,7 @@ GameObject:
   - component: {fileID: 1769115012}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28859,7 +28867,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textUI: {fileID: 1813274686}
-  config: {fileID: 1406707090}
   terrainGenerator: {fileID: 1744168646}
   shipSideGenerator: {fileID: 710165890}
   port: {fileID: 5469521324606078364, guid: 38b607dac3f8b2741937c40c3d9fae0e, type: 3}
@@ -28871,6 +28878,7 @@ MonoBehaviour:
     prefixes: []
     suffixes: []
     names: []
+  controllers: []
   cellOffsets:
   - {x: 1, y: 0, z: 0}
   - {x: -1, y: 0, z: 0}

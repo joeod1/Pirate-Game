@@ -81,13 +81,25 @@ namespace Assets.Ships
             }
         }
 
+        private void OnEnable()
+        {
+            if (inputMap != null)
+            {
+                inputMap.Enable();
+            }
+        }
+
         public void AttemptBoard()
         {
             // Try boarding a port first
             if (BoardPort != null) BoardPort(ship);
 
             // Ensure the ship in question and the boarding function exist
-            if (boardableShip != null && SystemsManager.BoardShip != null) SystemsManager.BoardShip(boardableShip, ship);
+            if (boardableShip != null && SystemsManager.BoardShip != null)
+            {
+                SystemsManager.BoardShip(boardableShip, ship);
+                inputMap.Disable();
+            }
         }
 
         public void ChangeSpeed()

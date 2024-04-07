@@ -80,7 +80,7 @@ namespace Assets
             paths = new Dictionary<Port, Path>();
             print(paths);
             List<Coroutine> co = new List<Coroutine>();
-            foreach (Port port in ports)
+            foreach (Port port in ports.ToList())
             {
                 if (port == this) continue;
                 if (dockCell == null) print("No dockCell?");
@@ -94,9 +94,9 @@ namespace Assets
                         {
                             p.UpdateArray();
                             paths.Add(port, p);
-                            GameManager.Instance.loadingBar.UpdateSubBar(Port.ct, ports.Count * ports.Count);
+                            GameManager.Instance.loadingBar.UpdateSubBar(Port.ct, (ports.Count - 1) * (ports.Count));
                         }
-                    }, count: 2500, port: portnum)));
+                    }, count: 5000, port: portnum)));
                     //paths.Add(port, terrainGenerator.AStar(port.dockCell, dockCell, count: 500));
                     //if (paths[port] == null || paths[port].currentNode == null) paths.Remove(port);
                     yield return null;

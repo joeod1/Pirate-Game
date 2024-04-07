@@ -32,9 +32,10 @@ namespace Assets.Logic
         public void LoadShip(Ship target, Ship sender)
         {
             sideGenerator.playerShip = sender;
-            sideGenerator.GenerateShip(target);
+            sideGenerator.ship = target;
             topdownGenerator.gameObject.SetActive(false);
             sideGenerator.gameObject.SetActive(true);
+            sideGenerator.GenerateShip(target);
         }
 
         public void LeaveShip()
