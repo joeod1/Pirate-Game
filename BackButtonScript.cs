@@ -10,11 +10,17 @@ public class BackButtonScript : MonoBehaviour
      public SettingsScript settingsScreen;
      public MenuButtonScript menu;
      public PauseButtonScript pause;
+     public MenuScript titleScreen;
     public void Start(){
         backButton = GetComponent<Button>();
         backButton.onClick.AddListener(TaskOnClick);
     }
     void TaskOnClick(){
+        //If settings menu was activated from title screen
+        if (TitleSettingsButtonScript.title == true){
+            titleScreen.gameObject.SetActive(true);
+            TitleSettingsButtonScript.title = false;
+        }
         Time.timeScale = 1;
         settingsScreen.gameObject.SetActive(false);
         menu.gameObject.SetActive(true);
