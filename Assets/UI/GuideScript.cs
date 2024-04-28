@@ -7,7 +7,7 @@ public class GuideScript : MonoBehaviour
     //disables main guide screen at the start
     public static GameObject guide;
     public void Start(){
-        HideGuide();
+        guide = gameObject;
     }
     public void HideGuide(){
         guide.SetActive(false);

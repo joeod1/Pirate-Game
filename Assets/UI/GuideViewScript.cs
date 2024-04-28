@@ -7,7 +7,7 @@ public class GuideViewScript : MonoBehaviour
     //disables screen at the start where you view specific controls for a specific function
     public static GameObject guide;
     public void Start(){
-        HideGuide();
+        guide = gameObject;
     }
     public void HideGuide(){
         guide.SetActive(false);
