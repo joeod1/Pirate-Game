@@ -36,6 +36,8 @@ public class ShipSideGenerator : MonoBehaviour
     public GameObject[] containers;
     public int shipSeed = -1;
 
+    public PlatformerPalette palette;
+
 
     public LadderMap ladders;
 
@@ -47,7 +49,7 @@ public class ShipSideGenerator : MonoBehaviour
     {
         if (playerShip != null) 
             playerShipCargo = playerShip.cargo;
-        GenerateShip(ship);
+        // GenerateShip(ship);
 
     }
 
@@ -78,10 +80,10 @@ public class ShipSideGenerator : MonoBehaviour
         TradeResources leftToPlace = new TradeResources();
         leftToPlace.quantities = ship.cargo.quantities.ToDictionary();//entry => entry.Key, entry => entry.Value);
         print("serialized right here: " + JsonUtility.ToJson(leftToPlace));
-        int totalLeft = leftToPlace.GetWeight();
+        int totalLeft = (int)leftToPlace.GetWeight();
         while (totalLeft > 0)
         {
-            foreach (KeyValuePair<ResourceType, int> quantity in leftToPlace.quantities)
+            foreach (KeyValuePair<ResourceType, float> quantity in leftToPlace.quantities)
             {
                 // we're done with this resource
                 if (quantity.Value == 0)
@@ -115,9 +117,9 @@ public class ShipSideGenerator : MonoBehaviour
                 }
 
                 // place the resources into the container
-                int quantityToGrab = TradeResources.QuantityFromWeight(quantity.Key, container.capacity);
-                if (quantityToGrab > quantity.Value) quantityToGrab = quantity.Value;
-                totalLeft -= TradeResources.WeightFromQuantity(quantity.Key, quantityToGrab);
+                int quantityToGrab = (int)TradeResources.QuantityFromWeight(quantity.Key, container.capacity);
+                if (quantityToGrab > quantity.Value) quantityToGrab = (int)quantity.Value;
+                totalLeft -= (int)TradeResources.WeightFromQuantity(quantity.Key, quantityToGrab);
                 container.contents.quantities[quantity.Key] = quantityToGrab;
                 leftToPlace.quantities[quantity.Key] -= quantityToGrab;
                 break;
@@ -200,9 +202,25 @@ public class ShipSideGenerator : MonoBehaviour
     
     }
 
+    public IEnumerator coFloodShip()
+    {
+        while (palette.water.transform.localScale.y <= 9)
+        {
+            yield return null;
+            palette.water.transform.localScale = new Vector3(40, palette.water.transform.localScale.y + 0.1f * Time.deltaTime, 1);
+            palette.water.transform.localPosition = new Vector3(20, 0.5f * palette.water.transform.localScale.y - 3f, 1);
+        }
+    }
+
     public void GenerateShip(Ship ship)
     {
+        palette.water.transform.localScale = new Vector3(40, 0.5f, 1);
+        palette.water.transform.localPosition = new Vector3(20, -2.75f, 1);
+        StartCoroutine(coFloodShip());
+
+        palette.sunLighting.gameObject.SetActive(false);
         this.ship = ship;
+        playerCharacter.GetComponent<PlayerController>().boardedShip = ship;
         // create a seed from the ship's name
         for (int i = 0; i < ship.name.Length; i++)
         {

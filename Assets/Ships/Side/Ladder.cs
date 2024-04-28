@@ -16,7 +16,7 @@ public class LadderCollisions : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Character controller = collision.gameObject.GetComponent<Character>();
-        if (controller != null)
+        if (controller != null && collision.isTrigger == false)
         {
             controller.EnterLadder();
         }
@@ -25,7 +25,7 @@ public class LadderCollisions : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         Character controller = collision.gameObject.GetComponent<Character>();
-        if (controller != null)
+        if (controller != null && collision.isTrigger == false)
         {
             controller.ExitLadder();
         }

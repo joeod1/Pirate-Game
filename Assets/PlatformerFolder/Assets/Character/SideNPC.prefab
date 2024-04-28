@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1459196073910328, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
       propertyPath: m_Name
-      value: SideChar Variant
+      value: SideNPC
       objectReference: {fileID: 0}
     - target: {fileID: 4877220767208928, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -63,6 +63,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1459196073910328, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1705645524466554329}
+    - targetCorrespondingSourceObject: {fileID: 1459196073910328, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 12315682261763822}
   m_SourcePrefab: {fileID: 100100000, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
 --- !u!1 &8691872121117695151 stripped
 GameObject:
@@ -81,3 +84,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8f2848ed9fdf0642a13446ee21c394e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  patroling: 0
+  reachedLeft: 0
+  reachedRight: 0
+  ladderBound: 0
+  dialogue:
+    initialPrompt:
+      end: 0
+      text: 
+      outText: 
+      responses: []
+      templated: []
+      callbackString: 
+    currentPrompt:
+      end: 0
+      text: 
+      outText: 
+      responses: []
+      templated: []
+      callbackString: 
+    prompts: []
+    onResponse:
+      m_PersistentCalls:
+        m_Calls: []
+    parameters:
+      keys: []
+      values: []
+  layerMask: 0
+--- !u!114 &12315682261763822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8691872121117695151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83189876d4d389f43b7dd2e925aa112e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentIDCounter: 1
+  json: 
+  saveVersion: 0
+  DefaultName: 
+  DefaultSprite: {fileID: 0}
+  DefaultFont: {fileID: 0}
+  NodeSerializedDataList: []
+  ContinueFont: {fileID: 0}
+  EndConversationFont: {fileID: 0}
+  Event:
+    m_PersistentCalls:
+      m_Calls: []

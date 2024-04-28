@@ -21,15 +21,15 @@ namespace Assets
     public class TradeResources
     {
         [SerializeField]
-        public SerializableDict<ResourceType, int> quantities = new SerializableDict<ResourceType, int>(
-            new Dictionary<ResourceType, int> {
-                { ResourceType.Wood, 0 },
-                { ResourceType.Food, 0 },
-                { ResourceType.Oranges, 0 },
-                { ResourceType.Gold, 0 },
-                { ResourceType.Water, 10 },
-                { ResourceType.Drink, 5 },
-                { ResourceType.CannonBalls, 75 },
+        public SerializableDict<ResourceType, float> quantities = new SerializableDict<ResourceType, float>(
+            new Dictionary<ResourceType, float> {
+                { ResourceType.Wood, 100 },
+                { ResourceType.Food, 100 },
+                { ResourceType.Oranges, 100 },
+                { ResourceType.Gold, 100 },
+                { ResourceType.Water, 100 },
+                { ResourceType.Drink, 100 },
+                { ResourceType.CannonBalls, 100 },
             }
         );
 
@@ -63,19 +63,47 @@ namespace Assets
             return weight / weights[type];
         }
 
-        static public int WeightFromQuantity(ResourceType type, int quantity)
+        static public float WeightFromQuantity(ResourceType type, float quantity)
         {
             return weights[type] * quantity;
         }
 
-        public int GetWeight()
+        public float GetWeight()
         {
-            int weight = 0;
-            foreach (KeyValuePair<ResourceType, int> quantity in quantities)
+            float weight = 0;
+            foreach (KeyValuePair<ResourceType, float> quantity in quantities)
             {
                 weight += WeightFromQuantity(quantity.Key, quantity.Value);
             }
             return weight;
+        }
+
+        public static TradeResources operator+(TradeResources one, TradeResources two)
+        {
+            TradeResources result = new TradeResources();
+
+            foreach (ResourceType type in Enum.GetValues(typeof(ResourceType)))
+            {
+                result.quantities[type] = 0;
+                if (one.quantities.ContainsKey(type)) result.quantities[type] += one.quantities[type];
+                if (two.quantities.ContainsKey(type)) result.quantities[type] += two.quantities[type];
+            }
+
+            return result;
+        }
+
+        public static TradeResources operator -(TradeResources one, TradeResources two)
+        {
+            TradeResources result = new TradeResources();
+
+            foreach (ResourceType type in Enum.GetValues(typeof(ResourceType)))
+            {
+                result.quantities[type] = 0;
+                if (one.quantities.ContainsKey(type)) result.quantities[type] += one.quantities[type];
+                if (two.quantities.ContainsKey(type)) result.quantities[type] -= two.quantities[type];
+            }
+
+            return result;
         }
 
         public new string ToString()

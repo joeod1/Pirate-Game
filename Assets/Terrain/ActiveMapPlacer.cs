@@ -103,6 +103,13 @@ namespace Assets
             newPort.name = portData.name;
             portData.uiText = textUI; //.GetComponent<PortCollisions>().uiText = textUI;
             portData.shipPrefab = shipPrefab;
+
+            ResourceType prod = (ResourceType)UnityEngine.Random.Range(0, 7);
+            foreach (ResourceType type in Enum.GetValues(typeof(ResourceType))) {
+                if (type == prod)
+                    portData.productions.quantities[type] = 100;
+                portData.resources.quantities[type] = 1000;
+            }
             // print(cell);
             if (!terrainGenerator.portCells.ContainsKey(cell))
             {

@@ -181,10 +181,81 @@ MonoBehaviour:
     z: 0
   uiText: {fileID: 0}
   pirateFriendly: 0
-  citizens: 0
+  citizens: 1000
   residents: 0
   defenseNeed: 0
   shipNeed: 0
+  shipsOwned: 0
+  resources:
+    quantities:
+      keys: 0000010002000300040005000600
+      values:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 640000006400000064000000640000006400000064000000
+  productions:
+    quantities:
+      keys: 0000010002000300040005000600
+      values:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 000000000000000000000000000000000000000000000000
+  consumption:
+    quantities:
+      keys: 0000010002000300040005000600
+      values:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 000000000000000000000000000000000000000000000000
+  needs:
+    quantities:
+      keys: 0000010002000300040005000600
+      values:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 000000000000000000000000000000000000000000000000
+  fetchingNeeds:
+    quantities:
+      keys: 0000010002000300040005000600
+      values:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    cannonballs:
+      keys: 000001000200030004000500
+      values: 000000000000000000000000000000000000000000000000
   wealth: 0
   food: 0
   drink: 0
@@ -193,6 +264,7 @@ MonoBehaviour:
   shipPrefab: {fileID: 0}
   ships: []
   shipsContainer: {fileID: 0}
+  awaitingDispatch: []
 --- !u!58 &1134071242644695188
 CircleCollider2D:
   m_ObjectHideFlags: 0

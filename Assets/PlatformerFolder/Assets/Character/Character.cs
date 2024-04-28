@@ -69,6 +69,9 @@ public class Character : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip stepSound;
 
+    public GameObject dialogueBox;
+    public GameObject dialogueBackground;
+
     public void InsightContents(TradeResources container)
     {
         containerPeek = container;
@@ -169,8 +172,16 @@ public class Character : MonoBehaviour
                 animator.SetBool("idle", false);
             }
 
-            if (direction < -0.01f) transform.localScale = Vector3.one * 1.6f;
-            else if (direction > 0.01f) transform.localScale = new Vector3(-1, 1, 1) * 1.6f;
+            if (direction < -0.01f)
+            {
+                transform.localScale = Vector3.one * 1.6f;
+                dialogueBox.transform.localScale = Vector3.one * 0.1f;
+            }
+            else if (direction > 0.01f)
+            {
+                transform.localScale = new Vector3(-1, 1, 1) * 1.6f;
+                dialogueBox.transform.localScale = new Vector3(-0.1f, 0.1f, 0.1f);
+            }
 
             body.velocity = new Vector2(direction * speed, body.velocity.y);
         }

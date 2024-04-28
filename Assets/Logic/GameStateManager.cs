@@ -1,4 +1,5 @@
-﻿using Assets.Ships;
+﻿using Assets.PlatformerFolder;
+using Assets.Ships;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,27 @@ namespace Assets.Logic
 
         public void LoadPort(Port target, Ship sender)
         {
-
+            // PlatformerManager.Instance.portGenerator.
+            if (PlatformerManager.Instance == null)
+            {
+                PlatformerManager.Instance = sideGenerator.GetComponent<PlatformerManager>();
+                PlatformerManager.Instance.Awake();
+            }
+            PlatformerManager.Instance.ResetTerrain();
+            PlatformerManager.Instance.portGenerator.coGeneratePort(target);
+            
+            topdownGenerator.gameObject.SetActive(false);
+            PlatformerManager.Instance.gameObject.SetActive(true);
         }
 
         public void LoadShip(Ship target, Ship sender)
         {
+            if (PlatformerManager.Instance == null)
+            {
+                PlatformerManager.Instance = sideGenerator.GetComponent<PlatformerManager>();
+                PlatformerManager.Instance.Awake();
+            }
+            PlatformerManager.Instance.ResetTerrain();
             sideGenerator.playerShip = sender;
             sideGenerator.ship = target;
             topdownGenerator.gameObject.SetActive(false);

@@ -33,6 +33,7 @@ namespace Assets.Ships
         public TargetSender BoardShipFunc;
 
         Ship boardableShip;
+        Port boardablePort;
 
         bool controlled = false;
 
@@ -92,7 +93,12 @@ namespace Assets.Ships
         public void AttemptBoard()
         {
             // Try boarding a port first
-            if (BoardPort != null) BoardPort(ship);
+            if (boardablePort != null && SystemsManager.DockPort != null)
+            {
+                SystemsManager.DockPort(boardablePort, ship);
+                inputMap.Disable();
+                return;
+            }
 
             // Ensure the ship in question and the boarding function exist
             if (boardableShip != null && SystemsManager.BoardShip != null)
@@ -196,7 +202,10 @@ namespace Assets.Ships
             Port otherPort = other.GetComponent<Port>();
             if (otherPort != null)
             {
+                if (boardablePort == otherPort) return;
+
                 SystemsManager.SetHint("at " + otherPort.name + "\npress space to dock");
+                boardablePort = otherPort;
                 return;
             }
         }
@@ -214,6 +223,7 @@ namespace Assets.Ships
             Port otherPort = other.GetComponent<Port>();
             if (otherPort != null)
             {
+                if (boardablePort == otherPort) boardablePort = null;
                 SystemsManager.UnsetHint("at " + otherPort.name + "\npress space to dock");
                 return;
             }

@@ -1,4 +1,5 @@
 using Assets;
+using Assets.Resources;
 using Assets.Ships;
 using System;
 using System.Collections;
@@ -33,6 +34,7 @@ public class Ship : MonoBehaviour, IDamageable
     public float turningSpeed = 0, maxTurningSpeed = 1;
     public Crew crew;
     public TradeResources cargo;
+    public TradeDeal tradeDeal = null;
     public float damageMultiplier = 1;  // amount of damage TAKEN
     public string homePort;
     public string destinationPort;
@@ -118,7 +120,7 @@ public class Ship : MonoBehaviour, IDamageable
     public void PlaceCannons()
     {
         // Start with a clean slate
-        // DestroyCannons();
+        DestroyCannons();
         print("Placing cannons" + cannonCount);
 
         int mid = cannonCount / 2;  // Midpoint; set each half on opposite sides of the ship

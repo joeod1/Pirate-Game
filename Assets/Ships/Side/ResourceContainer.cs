@@ -1,4 +1,5 @@
 using Assets;
+using Assets.Ships;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,20 +29,18 @@ public class ResourceContainer : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("We can trigger");
-        if (collision.GetComponent<Character>() != null)
+        ICanLoot player = collision.GetComponent<ICanLoot>();
+        if (player != null)
         {
-            collision.GetComponent<Character>().InsightContents(contents);
-            // display weight
-
+            player.PromptContainer(gameObject);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<Character>() != null)
+        ICanLoot player = collision.GetComponent<ICanLoot>();
+        if (player != null)
         {
-            // remove pop-up
-            collision.GetComponent<Character>().LeftContents(contents);
+            player.LeaveContainer(gameObject);
         }
     }
 }

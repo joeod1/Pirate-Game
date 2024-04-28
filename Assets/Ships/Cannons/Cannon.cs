@@ -28,6 +28,17 @@ namespace Assets
 
         public ForResourceQuantity ConsumeResource;
 
+        private void Awake()
+        {
+            primed = true;
+            loadSem = 1;
+        }
+
+        private void OnEnable()
+        {
+            loadSem = 1;
+        }
+
         public void BeginLoad(int loadTime = 1)
         {
             if (!selfManaging) return;
@@ -45,7 +56,10 @@ namespace Assets
             {
                 if (ConsumeResource != null)
                 {
-                    ConsumeResource(ResourceType.CannonBalls, 1);
+                    if (!ConsumeResource(ResourceType.CannonBalls, 1))
+                    {
+                        break;
+                    }
                 }
 
                 yield return new WaitForSeconds(time);

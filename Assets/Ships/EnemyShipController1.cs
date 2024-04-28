@@ -20,6 +20,7 @@ namespace Assets.Ships
         //public PathNode target;
         [DoNotSerialize]
         public Path path;
+        public int pathDir = 1;
         public int currentPathNode;
         public Vector3 targetPos;
         public float targetDepth;
@@ -54,7 +55,7 @@ namespace Assets.Ships
 
             // float fireRateAdvantage = attacking.CalculateFirePeriod() / CalculateFirePeriod(); // determine whether we can shoot faster. commented out because it's the same as healthAdvantage right now
 
-            float solution = healthAdvantage; // * fireRateAdvantage; // simplest way to put all these factors  together. may need to add/adjust coefficients and constants
+            float solution = healthAdvantage; // * fireRateAdvantage; // simplest way to put all these factors together. may need to add/adjust coefficients and constants
             if (solution > 0.5f) return true;
             return false;
         }
@@ -115,7 +116,7 @@ namespace Assets.Ships
                 ship.ApplyForce(direction, Time.deltaTime);
             } catch(Exception e)
             {
-                print(direction);
+                print(e);
             }
         }
 
@@ -152,9 +153,9 @@ namespace Assets.Ships
                     target = null;
                 }*/
 
-                if (currentPathNode + 1 < path.nodes.Count)
+                if (currentPathNode + pathDir < path.nodes.Count)
                 {
-                    currentPathNode++;
+                    currentPathNode += pathDir;
                     targetDepth = path.nodes[currentPathNode].depth;
                 } else
                 {
@@ -166,6 +167,7 @@ namespace Assets.Ships
         public void StartPath(Path path)
         {
             currentPathNode = 0;
+            pathDir = 1;
             this.path = path;
         }
 
@@ -178,7 +180,7 @@ namespace Assets.Ships
                 if (targetPos != null)
                     MoveToTarget(targetPos, 0f);
             }
-            else if (path != null && currentPathNode < path.nodes.Count)//(target != null)
+            else if (path != null && currentPathNode > -1 && currentPathNode < path.nodes.Count)//(target != null)
             {
                 MoveToNode(path.nodes[currentPathNode]);//target);
                 ManagePath();

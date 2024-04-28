@@ -174,10 +174,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 212962287570401342, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 743984003911659824, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3754713274075704548, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
       propertyPath: actions
       value: 
       objectReference: {fileID: -944628639613478452, guid: 4e0c7af55d186ef4784ca59130b46690, type: 3}
+    - target: {fileID: 4473521016749467490, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473521016749467490, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473521016749467490, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 37
+      objectReference: {fileID: 0}
+    - target: {fileID: 4473521016749467490, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6368268459856930165, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147023357885552595, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8578436782750483414, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8984758526641791043, guid: edb0c3134ab949245b5340f45aedbf1e, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -313,6 +349,9 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  playerShip: {fileID: 0}
+  boardedShip: {fileID: 0}
+  container: {fileID: 0}
 --- !u!81 &6812869995285776950
 AudioListener:
   m_ObjectHideFlags: 0

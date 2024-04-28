@@ -1,4 +1,5 @@
 using Assets;
+using Assets.Resources;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,35 +32,22 @@ public class ShipController : MonoBehaviour
     public Vector2 offAxis = new Vector2(0, 0);
 
     [Header("Status")]
-    [SerializeField]
     public string name = "fun";
-    [SerializeField]
     public TradeResources cargo = new TradeResources();
-    [SerializeField]
+    public TradeDeal tradeDeal = null;
     public float health = 100;
-    [SerializeField]
     public float maxHealth = 100;
-    [SerializeField]
     public float floating = 1;
-    [SerializeField]
     public GameObject circle;
-    [SerializeField]
     public BoardingCircle boardingCircle;
-    [SerializeField]
     public bool sank = false;
-    [SerializeField]
     public GameObject healthBar;
-    [SerializeField]
     public GameObject healthMeter;
 
     [Header("Combat")]
-    [SerializeField]
     public GameObject cannonPrefab;
-    [SerializeField]
     public int cannonCount = 6;
-    [SerializeField]
     public List<Cannon> portSideCannons = new List<Cannon>(); // left side
-    [SerializeField]
     public List<Cannon> starboardSideCannons = new List<Cannon>(); // right side
 
     public static NameMap nameMap;

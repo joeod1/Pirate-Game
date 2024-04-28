@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.Tilemaps;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Assets.PlatformerFolder
 {
@@ -15,6 +16,11 @@ namespace Assets.PlatformerFolder
         public GameObject partsContainer;
         public GameObject characterContainer;
         public Tilemap tilemap;
+        public Tilemap groundTilemap;
+
+        [Header("Common Instances")]
+        public Light sunLighting;
+        public GameObject water;
 
         [Header("Entity Prefabs")]
         public GameObject npcPrefab;
@@ -26,8 +32,14 @@ namespace Assets.PlatformerFolder
         public GameObject wall;
         public GameObject beam;
         public GameObject lamp;
+        public GameObject weaponStand;
+        public GameObject foodStand;
+        public GameObject playerCount;
+        public GameObject dock;
 
         [Header("Background Tiles")]
         public Tile woodTile;
+        public Tile groundTop;
+        public Tile groundMiddle;
     }
 }
