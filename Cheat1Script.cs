@@ -19,6 +19,7 @@ public class Cheat1Script : MonoBehaviour
         
     }
     public void TaskOnClick(){
+        //Adds 100 gold when clicking the cheat button
         UIGoldAmount.amount = UIGoldAmount.amount + 100;
         UIGoldAmount.HighAmountBound();
     }

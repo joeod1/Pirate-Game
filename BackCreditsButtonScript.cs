@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class BackCreditsButtonScript : MonoBehaviour
 {
+//back button for the credits screen
     private Button backButton;
 
   public MenuScript menuScreen;

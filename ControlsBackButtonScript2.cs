@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ControlsBackButtonScript2 : MonoBehaviour
 {
     private Button settingsButton;
-// back buton for the controls screen
+// back button for the controls screen
   public ControlsScript controlsScreen;
   public SettingsScript settingsScreen;
     public void Start(){

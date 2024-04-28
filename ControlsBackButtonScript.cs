@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ControlsBackButtonScript : MonoBehaviour
 {
+    //A back button used in the controls section
     // Start is called before the first frame update
       private Button backButton;
      public  ControlsViewScript controlsView;

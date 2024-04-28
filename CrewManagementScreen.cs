@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CrewManagementScreen : MonoBehaviour
 {
+  //Script that manages the crew interfaces in the manage screen
 static Dictionary<string, CrewCard> crew = new Dictionary<string, CrewCard>();
   static CrewCard GetMember(string name) {
      if (crew.ContainsKey("name")){

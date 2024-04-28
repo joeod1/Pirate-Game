@@ -20,6 +20,7 @@ public class UIGoldAmount : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Rounds the amount if its above a thousand
         if (amount < 1000){
             LowerAmountBound();
         amountText.text = amount.ToString() + " GOLD";

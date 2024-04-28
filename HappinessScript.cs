@@ -11,6 +11,7 @@ public class HappinessScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Placeholder amount for happiness is set to 50/100
         happinessText = GetComponent<TMP_Text>();
         happiness = 50;
         maxHappiness = 100;

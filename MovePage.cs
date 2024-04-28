@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MovePage : MonoBehaviour
 {
-    //basic button for viewing the controls
+    //basic button for moving the pages in the guide
       private Button guideButton;
      public  GuideViewScript nextPage;
      public  GuideViewScript previousPage;

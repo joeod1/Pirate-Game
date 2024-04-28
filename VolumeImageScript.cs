@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class VolumeImageScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    //Shows text when you hover over the image
     [SerializeField]
     public GameObject TextScreen;
     // Start is called before the first frame update

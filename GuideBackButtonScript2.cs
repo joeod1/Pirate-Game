@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class GuideBackButton2 : MonoBehaviour
 {
     private Button settingsButton;
-// back buton for the controls screen
+// back buton for the guide screen
   public GuideScript guideScreen;
   public SettingsScript settingsScreen;
     public void Start(){

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class TitleSettingsButtonScript : MonoBehaviour
 {
+    //For the Settings button on the title screen
     //when clicking on the settings button, pauses game and hides pause and menu, shows main settings screen
     private Button settingsButton;
   public SettingsScript settingsScreen;

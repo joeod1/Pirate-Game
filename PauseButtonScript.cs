@@ -21,7 +21,7 @@ public class PauseButtonScript : MonoBehaviour
 
     }
     public void Update(){
-        if (Input.GetKeyDown(KeyCode.P)) //pauses game when you press p, can't unpause game with 'p'
+        if (Input.GetKeyDown(KeyCode.P)) //pauses game when you press p and unpauses game when you press p again
         {
             TaskOnClick();       
         }

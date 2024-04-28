@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Feed1Orange : MonoBehaviour
 {
+    //Script that when feeding an orange, increases a crew member's happiness by 5
     public HappinessScript happy2;
     private Button feedOrangeButton;
     // Start is called before the first frame update
