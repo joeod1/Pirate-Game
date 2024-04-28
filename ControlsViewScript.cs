@@ -7,7 +7,7 @@ public class ControlsViewScript : MonoBehaviour
     //disables screen at the start where you view specific controls for a specific function
     public static GameObject controls;
     public void Start(){
-        HideControls();
+        controls = gameObject;
     }
     public void HideControls(){
         controls.SetActive(false);

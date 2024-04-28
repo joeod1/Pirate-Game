@@ -7,7 +7,8 @@ public class MenuScript : MonoBehaviour
     //hides all menu screens in the menu canvas at the start
     public static GameObject menu;
     public void Start(){
-        HideMenu();
+        menu = gameObject;
+        
     }
     public void HideMenu(){
         menu.SetActive(false);

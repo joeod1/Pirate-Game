@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using Unity.Burst.CompilerServices;
 using Unity.Mathematics;
@@ -187,6 +188,8 @@ public class ShipSideGenerator : MonoBehaviour
     public void PlaceEnemies() {
 
         int crewMates = 3;
+
+        CharacterCreator creator = GetComponentInParent<CharacterCreator>();
         
         for (int i = 0; i < crewMates; i++)
         {
@@ -197,6 +200,18 @@ public class ShipSideGenerator : MonoBehaviour
                 );
             newEnemy.GetComponent<NonPlayerController>().ladders = ladders;
             newEnemy.GetComponent<NonPlayerController>().target = playerCharacter;
+            Character enemyCharacter = newEnemy.GetComponent<Character>();
+
+            int rollForFish = UnityEngine.Random.Range(1, 7);
+            if (rollForFish == 6)
+            {
+                creator.CreateFishCharacter(enemyCharacter);
+            }
+            else
+            {
+                creator.CreateHumanCharacter(enemyCharacter);
+            }
+
             newEnemy.SetActive(true);
         }
     
