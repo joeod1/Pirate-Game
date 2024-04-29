@@ -1,41 +1,3 @@
-<<<<<<< HEAD:Assets/UI/Feed1Orange.cs
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class Feed1Orange : MonoBehaviour
-{
-    public HappinessScript happy2;
-    private Button feedOrangeButton;
-    // Start is called before the first frame update
-    void Start()
-    {
-        feedOrangeButton = GetComponent<Button>();
-        feedOrangeButton.onClick.AddListener(TaskOnClick);
-    }
-    void TaskOnClick(){
-       if (OrangeAmount.amount >= 1 && happy2.happiness < 100){
-       OrangeAmount.amount = OrangeAmount.amount - 1;
-       happy2.happiness = happy2.happiness + 5;
-       if (happy2.happiness > 100){
-            maxBound();
-       }
-       }
-      
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    void maxBound()
-    {
-        happy2.happiness = 100;
-    }
-    
-=======
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -73,5 +35,4 @@ public class Feed1Orange : MonoBehaviour
         happy2.happiness = 100;
     }
     
->>>>>>> 1d2f3e3bfc47ccf7de0cbf438d6fcc3b50b5f0b6:Feed1Orange.cs
 }

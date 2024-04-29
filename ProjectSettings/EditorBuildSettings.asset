@@ -8,8 +8,11 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/TopDownShipScene.unity
     guid: 3defb9f69faa23443beb093e5d4f35d5
-  - enabled: 1
+  - enabled: 0
     path: Assets/JoeSceneBackup.unity
     guid: a592c3ed7cfc02041930a17837c02416
+  - enabled: 1
+    path: Assets/JoeSceneBackup 5.unity
+    guid: f234733671f7cc24d9003589021ba463
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: e4bf817f25e0e5b4e8cfdf225a822f7c, type: 2}
