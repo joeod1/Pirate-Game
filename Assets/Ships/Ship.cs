@@ -19,7 +19,7 @@ public class Ship : MonoBehaviour, IDamageable
 {
     [Header("Rendering")]
     [DoNotSerialize] public Transform shipModel;
-    private Rigidbody2D rb2D;
+    public Rigidbody2D rb2D;
     public float horizontalAngle = 45f;
     public float verticalAngle = 45f;
     public Vector2 offAxis;
@@ -78,7 +78,7 @@ public class Ship : MonoBehaviour, IDamageable
 
         if (sinkage >= 3)
         {
-            if (OnSank != null)
+            if (OnSank != null && sinkage < 3 + amount)
                 OnSank();
 
             if (destroyOnDeath)
@@ -274,7 +274,10 @@ public class Ship : MonoBehaviour, IDamageable
 
     public void Heal(float dmg, GameObject healer)
     {
-        throw new NotImplementedException();
+        health += dmg;
+        if (health > maxHealth) health = maxHealth;
+        if (showHealth) UpdateHealthBar();
+        if (OnDamage != null) OnDamage(-dmg);
     }
 
     public float GetHealth()

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Logic
 {
@@ -24,6 +26,8 @@ namespace Assets.Logic
         public SaveStateManager saveStateManager = new();
 
         public TerrainGeneration terrainGenerator;
+
+        public Image blackScreen;
 
         public LoadingBar loadingBar;
         public TMPro.TMP_Text hint;
@@ -45,6 +49,40 @@ namespace Assets.Logic
         {
             if (Instance.hint.text == text)
                 Instance.hint.text = "";
+        }
+
+        public IEnumerator coFadeBlack()
+        {
+            float currentFade = 0f;
+            while (currentFade < 1f)
+            {
+                currentFade += Time.deltaTime;
+                blackScreen.color = new Color(0, 0, 0, currentFade);
+                yield return null;
+            }
+        }
+
+        public static void FadeToBlack()
+        {
+            Instance.blackScreen.gameObject.SetActive(true);
+            Instance.StartCoroutine(Instance.coFadeBlack());
+        }
+
+        public IEnumerator coFadeIn()
+        {
+            float currentFade = 1f;
+            while (currentFade > 0f)
+            {
+                currentFade -= Time.deltaTime;
+                blackScreen.color = new Color(0, 0, 0, currentFade);
+                yield return null;
+            }
+            Instance.blackScreen.gameObject.SetActive(false);
+        }
+
+        public static void FadeFromBlack()
+        {
+            Instance.StartCoroutine(Instance.coFadeIn());
         }
 
         private void Awake()

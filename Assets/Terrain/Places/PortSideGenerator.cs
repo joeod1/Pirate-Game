@@ -9,8 +9,12 @@ public class PortSideGenerator : MonoBehaviour
 {
     public PlatformerPalette palette;
 
+    public AudioClip portsideMusic;
+
     public void coGeneratePort(Port target)
     {
+        MusicPlayer.PlayTrack(portsideMusic);
+
         if (palette == null)
         {
             print("Palette is null :/");

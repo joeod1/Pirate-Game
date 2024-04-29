@@ -44,6 +44,8 @@ public class ShipSideGenerator : MonoBehaviour
 
     public GameObject enemyPrefab;
 
+    public AudioClip shipsideMusic;
+
 
     // Start is called before the first frame update
     void Start()
@@ -174,7 +176,15 @@ public class ShipSideGenerator : MonoBehaviour
                     {
                         newBeam.GetComponent<SpriteRenderer>().flipX = true;
                     }
-                    if (x >= bounds.x) continue;
+                    if (x >= bounds.x)
+                    {
+                        newBeam.GetComponent<BoxCollider2D>().enabled = true;
+                        continue;
+                    }
+                    else if (x == 0)
+                    {
+                        newBeam.GetComponent<BoxCollider2D>().enabled = true;
+                    }
                 } else
                 {
                     // create a lamp on every other
@@ -229,6 +239,8 @@ public class ShipSideGenerator : MonoBehaviour
 
     public void GenerateShip(Ship ship)
     {
+        MusicPlayer.PlayTrack(shipsideMusic);
+
         palette.water.transform.localScale = new Vector3(40, 0.5f, 1);
         palette.water.transform.localPosition = new Vector3(20, -2.75f, 1);
         StartCoroutine(coFloodShip());

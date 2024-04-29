@@ -1,3 +1,4 @@
+using Assets;
 using Assets.Logic;
 using Assets.PlatformerFolder;
 using Assets.PlatformerFolder.Assets;
@@ -155,6 +156,7 @@ public class PlayerController : SideController, ICanLoot
             {
                 character.topdownMode.SetActive(true);
                 character.platformerMode.SetActive(false);
+                MusicPlayer.PlayTrack(character.topdownMode.GetComponent<ActiveMapPlacer>().topdownMusic);
                 inputMap.Disable();
             }
         }

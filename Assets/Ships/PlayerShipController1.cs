@@ -1,6 +1,8 @@
 ﻿using Assets.Logic;
 using Assets.Terrain;
+using Assets.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,9 @@ namespace Assets.Ships
     [Serializable]
     public class PlayerShipController1 : ShipController1, IBoards
     {
+        // quick fix, shouldn't be overused
+        public static PlayerShipController1 Instance;
+
         InputAction turnAction;
         InputAction accelerateAction;
         InputAction boardAction;
@@ -37,9 +42,17 @@ namespace Assets.Ships
 
         bool controlled = false;
 
+        public TMPro.TMP_Text healthText;
+        public TMPro.TMP_Text goldText;
+
         public override void Start()
         {
+            Instance = this;
             base.Start();
+
+            UpdateHUD();
+
+            ship.OnDamage += (float dmg) => { UpdateHUD(); } ;
             
             controlled = InitializeControls();
 
@@ -49,6 +62,58 @@ namespace Assets.Ships
                 SystemsManager.Instance.terrainGenerator.RenderZones();
                 zoneUsed = true;
             }
+
+            ship.OnSank += () =>
+            {
+                SystemsManager.SetHint("You succumb to the waves...");
+                SystemsManager.FadeToBlack();
+
+                StartCoroutine(coAnotherChance());
+            };
+
+            ship.cargo.quantities.OnChange += (ResourceType type) =>
+            {
+                TMPro.TMP_Text text = null;
+                switch (type)
+                {
+                    case ResourceType.Wood:
+                        text = InventoryUI.Instance.woodAmount; break;
+                    case ResourceType.Drink:
+                        text = InventoryUI.Instance.drinkAmount; break;
+                    case ResourceType.Water:
+                        text = InventoryUI.Instance.waterAmount; break;
+                    case ResourceType.Food:
+                        text = InventoryUI.Instance.foodAmount; break;
+                    case ResourceType.CannonBalls:
+                        text = InventoryUI.Instance.cannonballsAmount; break;
+                    case ResourceType.Gold:
+                        text = InventoryUI.Instance.goldAmount; break;
+                }
+                if (text == null) return;
+                text.text = ship.cargo.quantities[type].ToString();
+            };
+        }
+
+        public void UpdateHUD()
+        {
+            healthText.text = (int)ship.health + "/" + (int)ship.maxHealth;
+            goldText.text = ship.cargo.quantities[ResourceType.Gold].ToString() + " GOLD";
+        }
+
+        public IEnumerator coAnotherChance()
+        {
+            yield return new WaitForSeconds(2);
+            SystemsManager.SetHint("... A mermaid gives you one last chance");
+
+            yield return new WaitForSeconds(2);
+            SystemsManager.UnsetHint("... A mermaid gives you one last chance");
+            ship.health = ship.maxHealth;
+            ship.shipModel.transform.position -= new Vector3(0, 0, ship.sinkage);
+            ship.sinkage = 0;
+            ship.healthBar.SetActive(false);
+            ship.showHealth = true;
+            GetComponent<CapsuleCollider2D>().enabled = true;
+            SystemsManager.FadeFromBlack();
         }
 
         public bool InitializeControls()

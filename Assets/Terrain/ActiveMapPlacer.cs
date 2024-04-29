@@ -33,6 +33,8 @@ namespace Assets
         [SerializeField]
         public List<EnemyShipController> controllers;
 
+        public AudioClip topdownMusic;
+
         private int portsMade = 0;
         private int portsTotal = 0;
 
@@ -53,6 +55,11 @@ namespace Assets
             StartCoroutine(coPlacePorts());
 
             // StartCoroutine(coPrintAfterTime(10));
+        }
+
+        private void Awake()
+        {
+            MusicPlayer.PlayTrack(topdownMusic);
         }
 
         public NameMap LoadPortNames(string filename)

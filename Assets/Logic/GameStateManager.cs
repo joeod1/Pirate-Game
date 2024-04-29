@@ -59,6 +59,7 @@ namespace Assets.Logic
         {
             topdownGenerator.gameObject.SetActive(true);
             sideGenerator.gameObject.SetActive(false);
+            MusicPlayer.PlayTrack(topdownGenerator.topdownMusic);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -28,7 +27,7 @@ public class UIGoldAmount : MonoBehaviour
         else{
             HighAmountBound();
             floatAmount = (float) amount/1000;
-            roundedAmount = (float)Math.Round(floatAmount*10)/10;
+            roundedAmount = (float)System.Math.Round(floatAmount*10)/10;
             amountText.text = roundedAmount.ToString() + "k" + " GOLD";
         }
     }

@@ -118,7 +118,8 @@ namespace Assets
             }
             try
             {
-                // DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Values.Count - 1)]);
+                FetchNeeds(true);
+                //DeployTradeShip(paths.Keys.ToArray()[(int)UnityEngine.Random.Range(0, paths.Values.Count - 1)]);
             } catch (Exception e)
             {
                 print(e);
@@ -146,6 +147,14 @@ namespace Assets
                 controller.ship.destinationPort = destination.name;
                 ship.transform.position = SystemsManager.Instance.terrainGenerator.CellToWorld(dockCell); // paths[destination].currentNode.position;//terrainGenerator.CellToWorld(paths[destination].currentNode.cell);
                 controller.StartPath(paths[destination]);
+
+                controller.ship.cannonCount = (int)(defenseNeed * 10f) + 2;
+
+                controller.ship.OnSank += () =>
+                {
+                    defenseNeed += 0.2f;
+                    FetchNeeds(true);
+                };
                 //controller.path = paths[destination];//.startNode
                 //controller.currentPathNode = 0;
                 return controller.ship;
@@ -363,7 +372,7 @@ namespace Assets
                 }
                 else
                 {
-                    if (trade.homePt != gameObject) return;
+                    if (trade.homePt != gameObject || !trade.finished) return;
                     resources.quantities[trade.take] += trade.takeQt;
                     ship.ship.cargo.quantities[trade.take] -= trade.takeQt;
                     fetchingNeeds.quantities[trade.take] -= trade.takeQt;

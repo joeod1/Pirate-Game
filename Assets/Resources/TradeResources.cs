@@ -80,21 +80,24 @@ namespace Assets
 
         public static TradeResources operator+(TradeResources one, TradeResources two)
         {
-            TradeResources result = new TradeResources();
+            //TradeResources result = new TradeResources();
 
-            foreach (ResourceType type in Enum.GetValues(typeof(ResourceType)))
+            foreach (ResourceType type in one.quantities.Keys.ToList())//Enum.GetValues(typeof(ResourceType)))
             {
-                result.quantities[type] = 0;
-                if (one.quantities.ContainsKey(type)) result.quantities[type] += one.quantities[type];
-                if (two.quantities.ContainsKey(type)) result.quantities[type] += two.quantities[type];
+                //result.quantities[type] = 0;
+                //if (one.quantities.ContainsKey(type)) result.quantities[type] += one.quantities[type];
+                if (two.quantities.ContainsKey(type)) one.quantities[type] += two.quantities[type];
             }
 
-            return result;
+            //if (one.quantities.OnChange != null) result.quantities.OnChange = one.quantities.OnChange;
+            //else if (two.quantities.OnChange != null) result.quantities.OnChange = two.quantities.OnChange;
+
+            return one;
         }
 
         public static TradeResources operator -(TradeResources one, TradeResources two)
         {
-            TradeResources result = new TradeResources();
+            /*TradeResources result = new TradeResources();
 
             foreach (ResourceType type in Enum.GetValues(typeof(ResourceType)))
             {
@@ -103,7 +106,21 @@ namespace Assets
                 if (two.quantities.ContainsKey(type)) result.quantities[type] -= two.quantities[type];
             }
 
-            return result;
+            if (one.quantities.OnChange != null) result.quantities.OnChange = one.quantities.OnChange;
+            else if (two.quantities.OnChange != null) result.quantities.OnChange = two.quantities.OnChange;
+
+            return result;*/
+            foreach (ResourceType type in one.quantities.Keys.ToList())//Enum.GetValues(typeof(ResourceType)))
+            {
+                //result.quantities[type] = 0;
+                //if (one.quantities.ContainsKey(type)) result.quantities[type] += one.quantities[type];
+                if (two.quantities.ContainsKey(type)) one.quantities[type] -= two.quantities[type];
+            }
+
+            //if (one.quantities.OnChange != null) result.quantities.OnChange = one.quantities.OnChange;
+            //else if (two.quantities.OnChange != null) result.quantities.OnChange = two.quantities.OnChange;
+
+            return one;
         }
 
         public new string ToString()

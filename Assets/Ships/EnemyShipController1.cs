@@ -68,6 +68,8 @@ namespace Assets.Ships
                 targetDepth = depth;
             }
 
+            if (ship.attacker != null && ship.attacker.health <= 0) ship.attacker = null;
+
             // rotate the ship to look at the target
             direction = new Vector2(0, 0);
             Vector2 targetPos = new Vector2(targetPos3.x, targetPos3.y);
@@ -156,7 +158,8 @@ namespace Assets.Ships
                 if (currentPathNode + pathDir < path.nodes.Count)
                 {
                     currentPathNode += pathDir;
-                    targetDepth = path.nodes[currentPathNode].depth;
+                    if (currentPathNode < path.nodes.Count && path.nodes[currentPathNode] != null)
+                        targetDepth = path.nodes[currentPathNode].depth;
                 } else
                 {
                     path = null;

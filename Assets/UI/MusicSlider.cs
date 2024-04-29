@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Audio;
+using System.Linq;
 
 /*Credit to ChrisKurhan for this code. Title: "Audio Slider in Unity Done RIGHT | Unity Tutorial 
 Link Here: https://forum.unity.com/threads/audio-slider-in-unity-done-right-unity-tutorial.1247068/
@@ -20,25 +21,28 @@ public class MusicSlider : MonoBehaviour
     public AudioMixMode MixMode;
     public static MusicSlider Instance;
 
+    public string MixerGroupVolumeParameter = "Volume";
+
     public void OnChangeSlider(float Value){
         ValueText.SetText($"{Value.ToString("N4")}");
-        foreach (AudioSource source in AudioSources){
-            if (source == null){
-                AudioSources.Remove(source);
-                continue;
-            }
             switch(MixMode){
                 case AudioMixMode.LinearAudioSourceVolume:
-                source.volume = Value;
-                break;
+                    foreach (AudioSource source in AudioSources.ToList())
+                    {
+                        if (source == null)
+                        {
+                            AudioSources.Remove(source);
+                            continue;
+                        }
+                        source.volume = Value;
+                    }
+                    break;
                 case AudioMixMode.LinearMixerVolume:
-                Mixer.SetFloat("Volume", (-80 + Value * 80));
-                break;
+                    Mixer.SetFloat(MixerGroupVolumeParameter, (-80 + Value * 80));
+                    break;
                 case AudioMixMode.LogrithmicMixerVolume:
-                Mixer.SetFloat("Volume", Mathf.Log10(Value)*20);
-                break;
-                
-            }
+                    Mixer.SetFloat(MixerGroupVolumeParameter, Mathf.Log10(Value)*20);
+                    break;
         }
     }
     void Start()

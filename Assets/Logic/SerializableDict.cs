@@ -31,11 +31,14 @@ namespace Assets.Logic
             this.dict = new Dictionary<K, V>();
         }
 
+        public Action<K> OnChange;
+
         public V this[K key]
         {
             get { return dict[key]; }
-            set { dict[key] = value; }
+            set { dict[key] = value; if (OnChange != null) OnChange(key); }
         }
+
 
         public bool ContainsKey(K key)
         {

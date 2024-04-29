@@ -389,7 +389,7 @@ public class TerrainGeneration : MonoBehaviour
                     adjacentCell.depth = 0.5f;
                 }
                 //print(terrainValue + 1f);
-                float temp = (1f - adjacentCell.depth);
+                float temp = (1f - adjacentCell.depth) / 2f + 0.5f;
                 float newG = node.g + Vector3.Distance(node.cell, adjacentCell.cell) * temp * 1.2f;
              //   if (port >= 30) Debug.Log(UnityEngine.Random.Range(0, 100000) + "Comparing metrics");
                 if (newG < adjacentCell.g || openContains == null)
